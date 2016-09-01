@@ -1,5 +1,5 @@
 {
   "name": "time-keeper",
   "version": "0.0.1",
-  "main": "index.html"
+  "main": "src/index.html"
 }
