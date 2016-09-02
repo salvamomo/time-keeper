@@ -13,6 +13,7 @@
 // };
 
 function TimeEntry(description) {
+  this.time_entry_id = timeKeeper.getNextTimeEntryId();
   this.description = description;
   this.active = false;
 
@@ -60,6 +61,42 @@ TimeEntry.prototype.updateTrackedTime = function() {
 }
 
 TimeEntry.prototype.render = function() {
-  var markup = 'TODO: Complete render method.';
-  return markup;
+  // var timeEntryNode = Element.createElement('div');
+  // timeEntryNode.className = 'time-entry';
+
+  // timeEntryNode.textContent = 'test';
+  // return timeEntryNode;
+
+  var entryWrapper = document.createElement('div');
+  entryWrapper.className = 'time-entry';
+  entryWrapper.dataset['task:id'] = this.time_entry_id;
+
+  var markup =  '<span class="time-entry-description">' + this.description + '</span>' +
+    '<span class="time-entry-edit">Edit</span>';
+
+  entryWrapper.innerHTML = markup;
+  this.renderedOutput = entryWrapper;
+  this.attachBindings();
+  // Need to return the complete entryWrapper node, so that it's appended in the
+  // DOM, instead of inserted via innerHTML or insertAdjacentHTML(). If those
+  // options are used, all the attached bindings will be lost, because the
+  // engine will internally recreate the whole Tree based on the HTML string, so
+  // that would require the main app calling all the binding logic for each
+  // element manually.
+  return this.renderedOutput;
+
+}
+
+TimeEntry.prototype.attachBindings = function() {
+  var markup = this.renderedOutput;
+  console.log(this.renderedOutput);
+  for (var i = 0; i < markup.childNodes.length; i++) {
+    if (markup.childNodes.item(i).classList.contains('time-entry-edit')) {
+      markup.childNodes.item(i).addEventListener('click', function() {
+        alert('test');
+      });
+    }
+  }
+
+
 }

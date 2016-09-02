@@ -35,6 +35,13 @@ timeKeeper.addTimeEntry = function(description) {
   timeKeeper.time_entries.list.push(timeEntry);
 }
 
+// This should rely on the internal db.
+timeKeeper.getNextTimeEntryId = function() {
+  timeKeeper.time_entries.last_id = timeKeeper.time_entries.last_id || 0;
+  timeKeeper.time_entries.last_id++;
+  return timeKeeper.time_entries.last_id;
+}
+
 
 function addTimeEntryFormWidget() {
   var widgetMarkup = "<div id='new-time-entry-wrapper'>" +
@@ -45,18 +52,22 @@ function addTimeEntryFormWidget() {
 }
 
 function addTimeEntriesRegion() {
-  var regionWrapper = '<div id="time-entries-wrapper"><ul><li>YES!</li></ul></div>';
+  var regionWrapper = '<div id="time-entries-wrapper"></div>';
   document.body.innerHTML += regionWrapper;
   renderTimeEntries();
 }
 
 function renderTimeEntries() {
-  document.getElementById('time-entries-wrapper');
-
   if (timeKeeper.time_entries.list) {
+    document.getElementById('time-entries-wrapper').innerHTML = '<ul></ul>';
+
+    var entry_markup = '';
+
     timeKeeper.time_entries.list.forEach(function(timeEntry, index, entriesList) {
       if (timeEntry instanceof TimeEntry) {
-        alert(timeEntry.render());
+        entry_markup = timeEntry.render();
+        document.getElementById('time-entries-wrapper').getElementsByTagName('ul')[0].appendChild(document.createElement('li')).appendChild(entry_markup);
+        document.getElementById('time-entries-wrapper').getElementsByTagName('ul')[0].appendChild(document.createElement('li')).insertAdjacentHTML('beforeend', entry_markup.innerHTML);
       }
     });
   }
@@ -68,9 +79,11 @@ function addBindings() {
   submitButton.addEventListener('click', function() {
 
     var newTimeEntryDescription = document.getElementById('new-time-entry-description').value;
-    document.getElementById('new-time-entry-description').value = '';
-    timeKeeper.addTimeEntry(newTimeEntryDescription);
 
+    if (newTimeEntryDescription) {
+      document.getElementById('new-time-entry-description').value = '';
+      timeKeeper.addTimeEntry(newTimeEntryDescription);
+    }
     // TODO: This should just add a new task, instead of refreshing the whole list.
     renderTimeEntries();
   });
