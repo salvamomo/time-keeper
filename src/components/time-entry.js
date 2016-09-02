@@ -26,6 +26,8 @@ function TimeEntry(description) {
 
   // Total accumulated time on this task.
   this.total_time = 0;
+  this.updateIntervalId = null;
+  this.renderedNode = null;
 }
 
 TimeEntry.prototype.setDescription = function(description) {
@@ -39,15 +41,20 @@ TimeEntry.prototype.startTimer = function() {
   this.active = true;
 }
 
-TimeEntry.prototype.pauseTimer = function() {
+TimeEntry.prototype.stopTimer = function() {
+  // TODO: Implement event listener and so that the redraw logic is simply
+  // triggered automatically?.
   this.updateTrackedTime();
+  clearInterval(this.updateIntervalId);
   this.active = false;
+  this.render();
 }
 
 TimeEntry.prototype.resumeTimer = function() {
   if (this.active == false && this.total_time > 0) {
     // At the moment, this is the same than starting from 0.
     this.startTimer();
+    this.render();
   }
 }
 
@@ -61,42 +68,84 @@ TimeEntry.prototype.updateTrackedTime = function() {
 }
 
 TimeEntry.prototype.render = function() {
-  // var timeEntryNode = Element.createElement('div');
-  // timeEntryNode.className = 'time-entry';
+  if (this.renderedNode === null) {
+    var entryWrapper = document.createElement('div');
+    entryWrapper.className = 'time-entry';
+    entryWrapper.dataset['task:id'] = this.time_entry_id;
+    this.renderedNode = entryWrapper;
+  }
+  else {
+    entryWrapper = this.renderedNode;
+  }
 
-  // timeEntryNode.textContent = 'test';
-  // return timeEntryNode;
+  var stop_or_resume = (this.active) ? '<span data-ui-action="stop">Stop</span>' : '<span data-ui-action="resume">Resume</span>';
+  entryWrapper.innerHTML = '<span class="time-entry-description">' + this.description + '&nbsp;&nbsp;&nbsp;</span>' +
+    '<span class="time-entry-time-spent">' + this.total_time + '</span><br>' +
+    stop_or_resume +
+    '<span data-ui-action="edit">Edit</span>' +
+    '<span data-ui-action="delete">Delete</span>';
 
-  var entryWrapper = document.createElement('div');
-  entryWrapper.className = 'time-entry';
-  entryWrapper.dataset['task:id'] = this.time_entry_id;
-
-  var markup =  '<span class="time-entry-description">' + this.description + '</span>' +
-    '<span class="time-entry-edit">Edit</span>';
-
-  entryWrapper.innerHTML = markup;
-  this.renderedOutput = entryWrapper;
-  this.attachBindings();
+  this.attachBindings(entryWrapper);
   // Need to return the complete entryWrapper node, so that it's appended in the
   // DOM, instead of inserted via innerHTML or insertAdjacentHTML(). If those
   // options are used, all the attached bindings will be lost, because the
   // engine will internally recreate the whole Tree based on the HTML string, so
   // that would require the main app calling all the binding logic for each
   // element manually.
-  return this.renderedOutput;
-
+  // this.renderedNode = entryWrapper;
+  return entryWrapper;
 }
 
-TimeEntry.prototype.attachBindings = function() {
-  var markup = this.renderedOutput;
-  console.log(this.renderedOutput);
-  for (var i = 0; i < markup.childNodes.length; i++) {
-    if (markup.childNodes.item(i).classList.contains('time-entry-edit')) {
-      markup.childNodes.item(i).addEventListener('click', function() {
-        alert('test');
-      });
+TimeEntry.prototype.attachBindings = function(entryWrapper) {
+  var that = this;
+
+  var currentChildElement = null;
+  for (var i = 0; i < entryWrapper.childNodes.length; i++) {
+    if (entryWrapper.childNodes.item(i).hasAttribute('data-ui-action')) {
+      currentChildElement = entryWrapper.childNodes.item(i);
+      switch (currentChildElement.getAttribute('data-ui-action')) {
+        case 'stop':
+          currentChildElement.addEventListener('click', function() {
+            that.stopTimer();
+          });
+          break;
+        case 'resume':
+          currentChildElement.addEventListener('click', function() {
+            // TODO: need to stop current running task first.
+            that.resumeTimer();
+          });
+          break;
+        case 'edit':
+          currentChildElement.addEventListener('click', function() {
+            alert('edit');
+          });
+          break;
+        case 'delete':
+          currentChildElement.addEventListener('click', function() {
+            alert('delete');
+          });
+          break;
+      }
     }
   }
 
+  if (this.active) {
+    this.updateIntervalId = setInterval(function() {
+      // TODO: Implement event listener and trigger event so that when task is
+      // updated, the rest of the app knows about it? Not sure it's worth it though.
+      // If not event listener, maybe getters / setters from which to call rendering
+      // logic when needed?
+      that.updateTrackedTime();
+      that.redraw();
+    }, 1000);
+  }
 
 }
+
+TimeEntry.prototype.redraw = function() {
+  console.log('being updated');
+  // CHECKME: This can be tackled by simply calling this.render(). However,
+  // updating only the actual time seems sensible.
+  this.renderedNode.getElementsByClassName('time-entry-time-spent').item(0).textContent = this.total_time;
+}
+

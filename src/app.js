@@ -31,8 +31,16 @@ function init() {
 timeKeeper.addTimeEntry = function(description) {
   var timeEntry = new TimeEntry(description);
 
+  // Get current active entry, and stop it.
+  if (timeKeeper.time_entries.active_entry !== undefined) {
+    var currentActiveEntry = timeKeeper.time_entries.active_entry;
+    currentActiveEntry.stopTimer();
+  }
+  timeEntry.startTimer();
+
   timeKeeper.time_entries.list = timeKeeper.time_entries.list || [];
   timeKeeper.time_entries.list.push(timeEntry);
+  timeKeeper.time_entries.active_entry = timeEntry;
 }
 
 // This should rely on the internal db.
@@ -62,12 +70,12 @@ function renderTimeEntries() {
     document.getElementById('time-entries-wrapper').innerHTML = '<ul></ul>';
 
     var entry_markup = '';
+    var entry_list_container = document.getElementById('time-entries-wrapper').getElementsByTagName('ul').item(0);
 
     timeKeeper.time_entries.list.forEach(function(timeEntry, index, entriesList) {
       if (timeEntry instanceof TimeEntry) {
         entry_markup = timeEntry.render();
-        document.getElementById('time-entries-wrapper').getElementsByTagName('ul')[0].appendChild(document.createElement('li')).appendChild(entry_markup);
-        document.getElementById('time-entries-wrapper').getElementsByTagName('ul')[0].appendChild(document.createElement('li')).insertAdjacentHTML('beforeend', entry_markup.innerHTML);
+        entry_list_container.appendChild(document.createElement('li')).appendChild(entry_markup);
       }
     });
   }
@@ -79,7 +87,6 @@ function addBindings() {
   submitButton.addEventListener('click', function() {
 
     var newTimeEntryDescription = document.getElementById('new-time-entry-description').value;
-
     if (newTimeEntryDescription) {
       document.getElementById('new-time-entry-description').value = '';
       timeKeeper.addTimeEntry(newTimeEntryDescription);
