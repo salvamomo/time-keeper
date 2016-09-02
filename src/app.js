@@ -32,13 +32,14 @@ timeKeeper.addTimeEntry = function(description) {
   var timeEntry = new TimeEntry(description);
 
   // Get current active entry, and stop it.
-  if (timeKeeper.time_entries.active_entry !== undefined) {
+  if (timeKeeper.time_entries.active_entry != null) {
     var currentActiveEntry = timeKeeper.time_entries.active_entry;
     currentActiveEntry.stopTimer();
   }
   timeEntry.startTimer();
 
   timeKeeper.time_entries.list = timeKeeper.time_entries.list || [];
+  // timeKeeper.time_entries.list[timeEntry.time_entry_id] = timeEntry;
   timeKeeper.time_entries.list.push(timeEntry);
   timeKeeper.time_entries.active_entry = timeEntry;
 }
@@ -80,6 +81,42 @@ function renderTimeEntries() {
     });
   }
 
+  document.addEventListener('timeEntryStopped', function(e) {
+    timeKeeper.time_entries.active_entry = null;
+  });
+
+  document.addEventListener('timeEntryResumed', function(e) {
+    // If there's a time entry running, stop it.
+    if (timeKeeper.time_entries.active_entry) {
+      var currentTimeEntry = timeKeeper.time_entries.active_entry;
+      currentTimeEntry.stopTimer();
+    }
+    var resumedTimeEntry = e.detail;
+    timeKeeper.time_entries.active_entry = resumedTimeEntry;
+  });
+
+  document.addEventListener('timeEntryDeleted', function(e) {
+    var deletedTimeEntry = e.detail;
+
+    // TODO: this would call taskManager.deleteEntry(entryId).
+    // delete timeKeeper.time_entries.list[deletedTimeEntry.time_entry_id];
+    // CHECKME: Could do with a dispose() method on tasks to encapsulate some logic before destroying?
+    // e.g detaching events.
+    deletedTimeEntry.stopTimer();
+
+    if (timeKeeper.time_entries.active_entry === deletedTimeEntry) {
+      timeKeeper.time_entries.active_entry = null;
+    }
+
+    for(var index in timeKeeper.time_entries.list) {
+      if (timeKeeper.time_entries.list[index].time_entry_id == deletedTimeEntry.time_entry_id) {
+        timeKeeper.time_entries.list.splice(index, 1);
+        break;
+      }
+    }
+    renderTimeEntries();
+  });
+
 }
 
 function addBindings() {
@@ -90,16 +127,18 @@ function addBindings() {
     if (newTimeEntryDescription) {
       document.getElementById('new-time-entry-description').value = '';
       timeKeeper.addTimeEntry(newTimeEntryDescription);
+      // TODO: This should just add a new task, instead of refreshing the whole list.
+      renderTimeEntries();
     }
-    // TODO: This should just add a new task, instead of refreshing the whole list.
-    renderTimeEntries();
   });
 }
 
-
-
-
-
-
-
-
+// function taskManager() {
+//
+//   var active_entry;
+//   var entries_list;
+//   return api;
+// }
+//
+//
+//

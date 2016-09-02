@@ -107,11 +107,24 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
         case 'stop':
           currentChildElement.addEventListener('click', function() {
             that.stopTimer();
+
+            var stoppedEvent = new CustomEvent('timeEntryStopped', { 'detail': that });
+            console.log('Before stop');
+            document.dispatchEvent(stoppedEvent);
+            console.log('After stop');
           });
           break;
         case 'resume':
           currentChildElement.addEventListener('click', function() {
-            // TODO: need to stop current running task first.
+            // CHECKME: This only works if that.resumetimer() is called at the
+            // end, instead of at the beginning. Maybe something I'm missing
+            // with async behaviour?.
+            var resumedEvent = new CustomEvent('timeEntryResumed', { 'detail': that });
+            console.log('Before start');
+            document.dispatchEvent(resumedEvent);
+            console.log('After start');
+
+
             that.resumeTimer();
           });
           break;
@@ -122,7 +135,10 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
           break;
         case 'delete':
           currentChildElement.addEventListener('click', function() {
-            alert('delete');
+            var deleteEvent = new CustomEvent('timeEntryDeleted', { 'detail': that });
+            console.log('Before delete');
+            document.dispatchEvent(deleteEvent);
+            console.log('After delete');
           });
           break;
       }
@@ -130,6 +146,10 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
   }
 
   if (this.active) {
+    // FIXME: If the 'add' button is clicked even without values, it'll trigger
+    // a re-rendering of all the time entries, which will cause the active entry
+    // to reAttach the updating interval one extra time every time the 'add'
+    // button is pressed.
     this.updateIntervalId = setInterval(function() {
       // TODO: Implement event listener and trigger event so that when task is
       // updated, the rest of the app knows about it? Not sure it's worth it though.
