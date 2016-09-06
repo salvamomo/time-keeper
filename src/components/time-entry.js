@@ -28,6 +28,10 @@ function TimeEntry(description) {
   this.total_time = 0;
   this.updateIntervalId = null;
   this.renderedNode = null;
+
+  // Display state.
+  this.displayMode = 'default';
+
 }
 
 TimeEntry.prototype.setDescription = function(description) {
@@ -68,6 +72,8 @@ TimeEntry.prototype.updateTrackedTime = function() {
 }
 
 TimeEntry.prototype.render = function() {
+  this.displayMode = 'default';
+
   if (this.renderedNode === null) {
     var entryWrapper = document.createElement('div');
     entryWrapper.className = 'time-entry';
@@ -92,8 +98,38 @@ TimeEntry.prototype.render = function() {
   // engine will internally recreate the whole Tree based on the HTML string, so
   // that would require the main app calling all the binding logic for each
   // element manually.
-  // this.renderedNode = entryWrapper;
   return entryWrapper;
+}
+
+TimeEntry.prototype.renderEditable = function() {
+  // Don't do anything if 'edit' mode is already active.
+  // CHECKME: Maybe solve with HTML classes in the element, or a custom data
+  // attr?
+  if (this.displayMode == 'edit') {
+    return;
+  }
+  this.displayMode = 'edit';
+
+
+
+  if (this.renderedNode === null) {
+    var entryWrapper = document.createElement('div');
+    entryWrapper.className = 'time-entry';
+    entryWrapper.dataset['task:id'] = this.time_entry_id;
+    this.renderedNode = entryWrapper;
+  }
+  else {
+    entryWrapper = this.renderedNode;
+  }
+
+  var editWidget = document.createElement('div');
+  editWidget.innerHTML = '<input type="text" value="' + this.description + '">' +
+    '<button type="submit">Save</button>' +
+    '<button type="submit">Delete</button>';
+  // TODO: Add bindings for the new UI elements.
+
+
+  entryWrapper.appendChild(editWidget);
 }
 
 TimeEntry.prototype.attachBindings = function(entryWrapper) {
@@ -123,14 +159,12 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
             console.log('Before start');
             document.dispatchEvent(resumedEvent);
             console.log('After start');
-
-
             that.resumeTimer();
           });
           break;
         case 'edit':
           currentChildElement.addEventListener('click', function() {
-            alert('edit: ' + that.description);
+            that.renderEditable();
           });
           break;
         case 'delete':
