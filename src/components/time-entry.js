@@ -13,7 +13,7 @@
 // };
 
 function TimeEntry(description) {
-  this.time_entry_id = timeKeeper.getNextTimeEntryId();
+  this.time_entry_id = timeKeeper.TimeEntryManager.getNextTimeEntryId();
   this.description = description;
   this.active = false;
 
@@ -130,7 +130,7 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
           break;
         case 'edit':
           currentChildElement.addEventListener('click', function() {
-            alert('edit');
+            alert('edit: ' + that.description);
           });
           break;
         case 'delete':
@@ -168,4 +168,3 @@ TimeEntry.prototype.redraw = function() {
   // updating only the actual time seems sensible.
   this.renderedNode.getElementsByClassName('time-entry-time-spent').item(0).textContent = this.total_time;
 }
-
