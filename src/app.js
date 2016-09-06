@@ -59,37 +59,6 @@ function renderTimeEntries() {
       }
     });
   }
-
-  // TODO: All these events should be probably set on the TimeEntryManager.
-  document.addEventListener('timeEntryStopped', function(e) {
-    timeKeeper.TimeEntryManager.unsetActiveEntry();
-  });
-
-  document.addEventListener('timeEntryResumed', function(e) {
-    // If there's a time entry running, stop it.
-    var activeEntry = timeKeeper.TimeEntryManager.getActiveEntry();
-    if (activeEntry) {
-      activeEntry.stopTimer();
-    }
-    var resumedTimeEntry = e.detail;
-    timeKeeper.TimeEntryManager.setActiveEntry(resumedTimeEntry);
-  });
-
-  document.addEventListener('timeEntryDeleted', function(e) {
-    var deletedTimeEntry = e.detail;
-
-    // CHECKME: Could do with a dispose() method on tasks to encapsulate some logic before destroying?
-    // e.g detaching events.
-    deletedTimeEntry.stopTimer();
-
-    var activeEntry = timeKeeper.TimeEntryManager.getActiveEntry();
-    if (activeEntry === deletedTimeEntry) {
-      timeKeeper.TimeEntryManager.unsetActiveEntry();
-    }
-    timeKeeper.TimeEntryManager.deleteTimeEntry(deletedTimeEntry);
-    renderTimeEntries();
-  });
-
 }
 
 function addBindings() {

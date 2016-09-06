@@ -56,6 +56,44 @@ function TimeEntryManager() {
   }
 
 
+  // TODO: These event listeners need improving.
+  // Not sure of what to do with them and how to make that smooth between tasks
+  // and the manager, so just ditching them here for the time being.
+  // NOTE: Placed here and not in main renderEntries() function, as that's
+  // called every time a new entry is added (or deleted), and will cause
+  // events to be binded more than once.
+  (function addEventListeners() {
+    document.addEventListener('timeEntryStopped', function(e) {
+      timeKeeper.TimeEntryManager.unsetActiveEntry();
+    });
+
+    document.addEventListener('timeEntryResumed', function(e) {
+      // If there's a time entry running, stop it.
+      var activeEntry = timeKeeper.TimeEntryManager.getActiveEntry();
+      if (activeEntry) {
+        activeEntry.stopTimer();
+      }
+      var resumedTimeEntry = e.detail;
+      timeKeeper.TimeEntryManager.setActiveEntry(resumedTimeEntry);
+    });
+
+    document.addEventListener('timeEntryDeleted', function(e) {
+      var deletedTimeEntry = e.detail;
+
+      // CHECKME: Could do with a dispose() method on tasks to encapsulate some logic before destroying?
+      // e.g detaching events.
+      deletedTimeEntry.stopTimer();
+
+      var activeEntry = timeKeeper.TimeEntryManager.getActiveEntry();
+      if (activeEntry === deletedTimeEntry) {
+        timeKeeper.TimeEntryManager.unsetActiveEntry();
+      }
+      timeKeeper.TimeEntryManager.deleteTimeEntry(deletedTimeEntry);
+      renderTimeEntries();
+    });
+  })();
+
+
   var publicAPI = {
     addTimeEntry: addTimeEntry,
     getNextTimeEntryId: getNextTimeEntryId,
