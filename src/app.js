@@ -17,7 +17,13 @@ window.onload = init;
 function init() {
   console.log("Initialising application");
 
+  // TimeEntryManager file loaded from index.html.
   timeKeeper.TimeEntryManager = TimeEntryManager();
+
+  // TODO: db name should be kept in a list of constants.
+  console.log("Starting local database.");
+  timeKeeper.db = Database('timeKeeper');
+  timeKeeper.db.init();
 
   menus.init();
 
