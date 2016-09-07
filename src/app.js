@@ -4,6 +4,7 @@
 
 // Load required packages.
 var menus = require('./components/menus');
+// var db = require('./components/db');
 // var timeEntries = require('./components/time-entry');
 
 // When window is ready, initialise app.
@@ -17,23 +18,20 @@ window.onload = init;
 function init() {
   console.log("Initialising application");
 
-  // TimeEntryManager file loaded from index.html.
-  timeKeeper.TimeEntryManager = TimeEntryManager();
-
-  // TODO: db name should be kept in a list of constants.
   console.log("Starting local database.");
-  timeKeeper.db = Database('timeKeeper');
-  timeKeeper.db.init();
+  // TODO: db name should be kept in a list of constants.
+  timeKeeper.db = new Database('timeKeeper', function() {
+    // TimeEntryManager file loaded from index.html.
+    timeKeeper.TimeEntryManager = TimeEntryManager();
 
-  menus.init();
-
-  // Add widget to create a new time entry.
-  addTimeEntryFormWidget();
-  // Add region for time entries. (Time entries manager).
-  addTimeEntriesRegion();
-
-  // Add bindings.
-  addBindings();
+    menus.init();
+    // Add widget to create a new time entry.
+    addTimeEntryFormWidget();
+    // Add region for time entries. (Time entries manager).
+    addTimeEntriesRegion();
+    // Add bindings.
+    addBindings();
+  });
 }
 
 function addTimeEntryFormWidget() {

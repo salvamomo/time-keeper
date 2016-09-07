@@ -75,7 +75,7 @@ TimeEntry.prototype.updateTrackedTime = function() {
 TimeEntry.prototype.render = function() {
   this.displayMode = 'default';
 
-  if (this.renderedNode === null) {
+  if (this.renderedNode == null) {
     var entryWrapper = document.createElement('div');
     entryWrapper.className = 'time-entry';
     entryWrapper.dataset['task:id'] = this.time_entry_id;
@@ -225,7 +225,6 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
       that.redraw();
     }, 1000);
   }
-
 }
 
 
@@ -246,4 +245,19 @@ TimeEntry.prototype.redraw = function() {
   // CHECKME: This can be tackled by simply calling this.render(). However,
   // updating only the actual time seems sensible.
   this.renderedNode.getElementsByClassName('time-entry-time-spent').item(0).textContent = this.total_time;
+}
+
+// This emulates a public static method.
+TimeEntry.createFromDBObject = function(dbObject) {
+  // Create TimeEntry stub.
+  var newTimeEntry = new TimeEntry();
+  var timeEntryPropNames = Object.getOwnPropertyNames(newTimeEntry);
+
+  // Hydrate stub with all properties as retrieved from Database.
+  timeEntryPropNames.forEach(function(propName, index, propertyNames) {
+    if (dbObject.hasOwnProperty(propName)) {
+      newTimeEntry[propName] = dbObject[propName];
+    }
+  });
+  return newTimeEntry;
 }
