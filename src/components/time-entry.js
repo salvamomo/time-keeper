@@ -15,6 +15,7 @@
 function TimeEntry(description) {
   this.time_entry_id = timeKeeper.TimeEntryManager.getNextTimeEntryId();
   this.description = description;
+  this.date = new Date();
   this.active = false;
 
   // start_time of the current session of work on the task.
@@ -115,7 +116,8 @@ TimeEntry.prototype.renderEditable = function() {
   var entryWrapper = this.renderedNode;
 
   var editWidget = document.createElement('div');
-  editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '">' +
+  editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '"><br>' +
+    '<span class="edit-time-entry-date">' +  this.date + '</span><br>' +
     '<button type="submit" data-ui-action="save">Save</button>' +
     '<button type="submit" data-ui-action="delete">Delete</button>' +
     '<button type="submit" data-ui-action="cancel">Cancel</button>';
