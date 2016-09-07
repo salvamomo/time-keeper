@@ -91,6 +91,8 @@ TimeEntry.prototype.render = function() {
     '<span data-ui-action="edit">Edit</span>' +
     '<span data-ui-action="delete">Delete</span>';
 
+  // CHECKME: Make attachBindings a private method of this function?
+  this.detachBindings();
   this.attachBindings(entryWrapper);
   // Need to return the complete entryWrapper node, so that it's appended in the
   // DOM, instead of inserted via innerHTML or insertAdjacentHTML(). If those
@@ -110,24 +112,52 @@ TimeEntry.prototype.renderEditable = function() {
   }
   this.displayMode = 'edit';
 
-
-
-  if (this.renderedNode === null) {
-    var entryWrapper = document.createElement('div');
-    entryWrapper.className = 'time-entry';
-    entryWrapper.dataset['task:id'] = this.time_entry_id;
-    this.renderedNode = entryWrapper;
-  }
-  else {
-    entryWrapper = this.renderedNode;
-  }
+  var entryWrapper = this.renderedNode;
 
   var editWidget = document.createElement('div');
-  editWidget.innerHTML = '<input type="text" value="' + this.description + '">' +
-    '<button type="submit">Save</button>' +
-    '<button type="submit">Delete</button>';
-  // TODO: Add bindings for the new UI elements.
+  editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '">' +
+    '<button type="submit" data-ui-action="save">Save</button>' +
+    '<button type="submit" data-ui-action="delete">Delete</button>' +
+    '<button type="submit" data-ui-action="cancel">Cancel</button>';
 
+  // CHECKME: attachBindings. => detachBindings required? DOM API doesn't seem
+  // to have a clear way of getting eventListeners attached an element, so it'd
+  // be needed to keep a map of elements and events in order to detach them when
+  // required (jQuery would come handy here!). However, this doesn't seem to be
+  // needed at all, since all the DOMNode for the 'edit' mode will be completely
+  // gone when the form disappears (time entry save / cancel / delete, etc).
+  var that = this;
+
+  var currentChildElement = null;
+  for (var i = 0; i < editWidget.childNodes.length; i++) {
+    if (editWidget.childNodes.item(i).hasAttribute('data-ui-action')) {
+      currentChildElement = editWidget.childNodes.item(i);
+      switch (editWidget.childNodes.item(i).getAttribute('data-ui-action')) {
+        case 'save':
+          currentChildElement.addEventListener('click', function saveTimeEntryChanges() {
+            // CHECKME: Should the logic to hydrate the task object from the
+            // form be placed in a another function?
+            that.setDescription(that.renderedNode.getElementsByClassName('edit-time-entry-description').item(0).value);
+            that.render();
+          });
+          break;
+        case 'delete':
+          currentChildElement.addEventListener('click', function deleteTimeEntry() {
+            var deleteEvent = new CustomEvent('timeEntryDeleted', { 'detail': that });
+            console.log('Before delete');
+            document.dispatchEvent(deleteEvent);
+            console.log('After delete');
+          });
+          break;
+        case 'cancel':
+          currentChildElement.addEventListener('click', function deleteTimeEntry() {
+            // Simply render task in the default mode.
+            that.render();
+          });
+          break;
+      }
+    }
+  }
 
   entryWrapper.appendChild(editWidget);
 }
@@ -194,6 +224,19 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
     }, 1000);
   }
 
+}
+
+
+/**
+ * Detach time entry bindings.
+ *
+ * CHECKME: Maybe a better name, since this doesn't actually tackle even listeners?
+ * This is probably best placed right before setting the interval, to simply
+ * clear the existing one, or avoid creating a new one!
+ */
+TimeEntry.prototype.detachBindings = function() {
+  // Only need to clear the update timer interval.
+  clearInterval(this.updateIntervalId);
 }
 
 TimeEntry.prototype.redraw = function() {
