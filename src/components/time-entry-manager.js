@@ -20,6 +20,14 @@ function TimeEntryManager() {
         timeEntryFromDb = TimeEntry.createFromDBObject(timeEntries[i])
         if (timeEntryFromDb) {
           time_entries.push(timeEntryFromDb);
+
+          // If it's the active time entry, keep track of it.
+          // TODO: Add 'isActive' prototype method for it?
+          // Also, worth having a separate variable to control what's the actual
+          // active one, instead of relying on the time entry itself?
+          if (timeEntryFromDb.active) {
+            active_entry = timeEntryFromDb;
+          }
         }
       }
       renderTimeEntries();
