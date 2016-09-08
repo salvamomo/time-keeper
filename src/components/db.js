@@ -64,8 +64,11 @@ Database.prototype.updateTimeEntry = function(timeEntry, callback) {
   var timeEntryStore = this.db.transaction("time_entry", "readwrite").objectStore("time_entry");
   var request = timeEntryStore.put(timeEntry);
   request.onsuccess = function(event) {
-    // event.target.result has the time_entry_id, although it's not needed.
-    callback();
+    // event.target.result has the time_entry_id.
+    console.log("Time Entry state saved. ID: " + event.target.result);
+    if (callback) {
+      callback();
+    }
   }
   request.onerror = function(event) {
     alert('TODO: Opps. Error found when updating a TimeEntry in DB.');

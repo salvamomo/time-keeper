@@ -15,6 +15,7 @@
 // TODO: Need a lightweight way of storing the currently-running task info, in
 // case there's a crash of the application, it can be resumed where it stopped,
 // without losing the time passed since the crash (or the close event).
+// Note: with current setup it might not be needed at all.
 
 // CHECKME: There's certainly a need for some more controller logic for db
 // interactions. time_entry_id can't be defined through Object.defineProperty,
@@ -71,6 +72,13 @@ TimeEntry.prototype.stopTimer = function() {
   this.updateTrackedTime();
   clearInterval(this.updateIntervalId);
   this.active = false;
+
+  // Trigger event about entry being stopped.
+  var stoppedEvent = new CustomEvent('timeEntryStopped', { 'detail': this });
+  console.log('Before stop');
+  document.dispatchEvent(stoppedEvent);
+  console.log('After stop');
+
   this.render();
 }
 
@@ -78,6 +86,15 @@ TimeEntry.prototype.resumeTimer = function() {
   if (this.active == false && this.total_time > 0) {
     // At the moment, this is the same than starting from 0.
     this.startTimer();
+
+    // CHECKME: This only works if that.resumetimer() is called at the
+    // end, instead of at the beginning. Maybe something I'm missing
+    // with async behaviour?.
+    var resumedEvent = new CustomEvent('timeEntryResumed', { 'detail': this });
+    console.log('Before start');
+    document.dispatchEvent(resumedEvent);
+    console.log('After start');
+
     this.render();
   }
 }
@@ -194,22 +211,10 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
         case 'stop':
           currentChildElement.addEventListener('click', function() {
             that.stopTimer();
-
-            var stoppedEvent = new CustomEvent('timeEntryStopped', { 'detail': that });
-            console.log('Before stop');
-            document.dispatchEvent(stoppedEvent);
-            console.log('After stop');
           });
           break;
         case 'resume':
           currentChildElement.addEventListener('click', function() {
-            // CHECKME: This only works if that.resumetimer() is called at the
-            // end, instead of at the beginning. Maybe something I'm missing
-            // with async behaviour?.
-            var resumedEvent = new CustomEvent('timeEntryResumed', { 'detail': that });
-            console.log('Before start');
-            document.dispatchEvent(resumedEvent);
-            console.log('After start');
             that.resumeTimer();
           });
           break;

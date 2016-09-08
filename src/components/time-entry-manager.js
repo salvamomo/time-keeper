@@ -87,7 +87,7 @@ function TimeEntryManager() {
       timeKeeper.TimeEntryManager.unsetActiveEntry();
       var stoppedEntry = e.detail;
       timeKeeper.db.updateTimeEntry(stoppedEntry, function() {
-        // TODO: complete.
+        // Check me: Want to add anything here?
       });
     });
 
@@ -98,8 +98,8 @@ function TimeEntryManager() {
         activeEntry.stopTimer();
       }
       var resumedTimeEntry = e.detail;
-      // timeKeeper.db.updateTimeEntry(resumedTimeEntry);
       timeKeeper.TimeEntryManager.setActiveEntry(resumedTimeEntry);
+      timeKeeper.db.updateTimeEntry(resumedTimeEntry);
     });
 
     document.addEventListener('timeEntryDeleted', function(e) {
