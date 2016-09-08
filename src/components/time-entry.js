@@ -16,10 +16,16 @@
 // case there's a crash of the application, it can be resumed where it stopped,
 // without losing the time passed since the crash (or the close event).
 function TimeEntry(description) {
-  // Declare time_entry_id but set to nothing, as that'll make IndexedDB's
-  // object store generate the ID for it according to the records present in the
-  // database.
-  this.time_entry_id;
+  // Set time_entry_id to null. It'll be populated when saving the time entry
+  // into the database.
+  this.time_entry_id = null;
+
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+  // Define time_entry_id property so it can be hydrated when retrieving one of
+  // the entries from database. However, make it non-enumerable, so that it's
+  // not automagically read by IndexedDB, which will avoid making it think that
+  // a time_entry_id is being provided.
+  Object.defineProperty(this, 'time_entry_id', { writable: true, enumerable: false });
 
   this.description = description;
   this.date = new Date();
