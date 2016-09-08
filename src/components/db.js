@@ -71,7 +71,7 @@ Database.prototype.updateTimeEntry = function(timeEntry, callback) {
     }
   }
   request.onerror = function(event) {
-    alert('TODO: Opps. Error found when updating a TimeEntry in DB.');
+    alert('TODO: Oops. Error found when updating a TimeEntry in DB.');
   }
 }
 
