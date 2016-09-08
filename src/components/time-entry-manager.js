@@ -113,8 +113,15 @@ function TimeEntryManager() {
       if (activeEntry === deletedTimeEntry) {
         timeKeeper.TimeEntryManager.unsetActiveEntry();
       }
-      timeKeeper.TimeEntryManager.deleteTimeEntry(deletedTimeEntry);
-      renderTimeEntries();
+      timeKeeper.db.deleteTimeEntry(deletedTimeEntry.time_entry_id, function(success) {
+        if (success) {
+          timeKeeper.TimeEntryManager.deleteTimeEntry(deletedTimeEntry);
+          renderTimeEntries();
+        }
+        else {
+          alert("TODO: Better handling for when a time entry can't be deleted");
+        }
+      });
     });
   })();
 

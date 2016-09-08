@@ -46,9 +46,7 @@ function Database(name, callback) {
     }
   }
 
-  // TODO: Make methods actually async...
   //   // readTimeEntry: 'TODO',
-  //   // deleteTimeEntry: 'TODO',
 }
 
 Database.prototype.createTimeEntry = function(timeEntry, callback) {
@@ -69,11 +67,28 @@ Database.prototype.updateTimeEntry = function(timeEntry, callback) {
     if (callback) {
       callback();
     }
-  }
+  };
   request.onerror = function(event) {
     alert('TODO: Oops. Error found when updating a TimeEntry in DB.');
   }
-}
+};
+
+Database.prototype.deleteTimeEntry = function(timeEntryId, callback) {
+  var timeEntryStore = this.db.transaction("time_entry", "readwrite").objectStore("time_entry");
+  var request = timeEntryStore.delete(timeEntryId);
+  request.onsuccess = function(event) {
+    console.log("Successfully removed Time Entry. ID: " + timeEntryId);
+    if (callback) {
+      callback(true);
+    }
+  };
+  request.onerror = function(event) {
+    console.log("Error removing Time Entry. ID: " + timeEntryId);
+    if (callback) {
+      callback(false);
+    }
+  }
+};
 
 // Returns all the existing time entries in the database.
 Database.prototype.getAllTimeEntries = function(callback) {
@@ -91,4 +106,4 @@ Database.prototype.getAllTimeEntries = function(callback) {
       callback(timeEntries);
     }
   }
-}
+};

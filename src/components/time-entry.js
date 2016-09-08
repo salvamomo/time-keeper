@@ -182,9 +182,7 @@ TimeEntry.prototype.renderEditable = function() {
         case 'delete':
           currentChildElement.addEventListener('click', function deleteTimeEntry() {
             var deleteEvent = new CustomEvent('timeEntryDeleted', { 'detail': that });
-            console.log('Before delete');
             document.dispatchEvent(deleteEvent);
-            console.log('After delete');
           });
           break;
         case 'cancel':
@@ -226,9 +224,7 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
         case 'delete':
           currentChildElement.addEventListener('click', function() {
             var deleteEvent = new CustomEvent('timeEntryDeleted', { 'detail': that });
-            console.log('Before delete');
             document.dispatchEvent(deleteEvent);
-            console.log('After delete');
           });
           break;
       }
