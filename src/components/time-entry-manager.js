@@ -32,12 +32,19 @@ function TimeEntryManager() {
     // Get current active entry, and stop it.
     if (active_entry != null) {
       active_entry.stopTimer();
+      // timeKeeper.db.updateTimeEntry(active_entry);
     }
+
     timeEntry.startTimer();
     time_entries.push(timeEntry);
 
     // TODO: Add error handling here. seriously. Add it!
-    timeKeeper.db.createTimeEntry(timeEntry);
+    timeKeeper.db.createTimeEntry(timeEntry, function(time_entry_id) {
+      timeEntry.setTimeEntryId(time_entry_id);
+      // TODO: This should just add a new task to the list, rather than
+      // refreshing the whole list.
+      renderTimeEntries();
+    });
     active_entry = timeEntry;
   }
 
@@ -78,6 +85,8 @@ function TimeEntryManager() {
   (function addEventListeners() {
     document.addEventListener('timeEntryStopped', function(e) {
       timeKeeper.TimeEntryManager.unsetActiveEntry();
+      console.log(timeKeeper.TimeEntryManager.getActiveEntry());
+      // timeKeeper.db.updateTimeEntry(timeKeeper.TimeEntryManager.getActiveEntry());
     });
 
     document.addEventListener('timeEntryResumed', function(e) {
@@ -87,6 +96,7 @@ function TimeEntryManager() {
         activeEntry.stopTimer();
       }
       var resumedTimeEntry = e.detail;
+      // timeKeeper.db.updateTimeEntry(resumedTimeEntry);
       timeKeeper.TimeEntryManager.setActiveEntry(resumedTimeEntry);
     });
 

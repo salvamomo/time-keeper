@@ -72,8 +72,6 @@ function addBindings() {
     if (newTimeEntryDescription) {
       document.getElementById('new-time-entry-description').value = '';
       timeKeeper.TimeEntryManager.addTimeEntry(newTimeEntryDescription);
-      // TODO: This should just add a new task, instead of refreshing the whole list.
-      renderTimeEntries();
     }
   });
 }

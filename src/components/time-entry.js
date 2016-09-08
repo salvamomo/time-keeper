@@ -12,11 +12,14 @@
 //
 // };
 
+// TODO: Need a lightweight way of storing the currently-running task info, in
+// case there's a crash of the application, it can be resumed where it stopped,
+// without losing the time passed since the crash (or the close event).
 function TimeEntry(description) {
-  // Setting time_entry_id to undefined on purpose, as that'll make IndexedDB's
+  // Declare time_entry_id but set to nothing, as that'll make IndexedDB's
   // object store generate the ID for it according to the records present in the
   // database.
-  this.time_entry_id = undefined;
+  this.time_entry_id;
 
   this.description = description;
   this.date = new Date();
@@ -36,7 +39,10 @@ function TimeEntry(description) {
 
   // Display state.
   this.displayMode = 'default';
+}
 
+TimeEntry.prototype.setTimeEntryId = function(timeEntryId) {
+  this.time_entry_id = timeEntryId;
 }
 
 TimeEntry.prototype.setDescription = function(description) {
