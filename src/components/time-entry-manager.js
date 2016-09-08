@@ -110,6 +110,20 @@ function TimeEntryManager() {
       timeKeeper.db.updateTimeEntry(resumedTimeEntry);
     });
 
+    document.addEventListener('timeEntryUpdated', function(e) {
+      var updatedEntry = e.detail;
+      timeKeeper.db.updateTimeEntry(updatedEntry, function(success) {
+        if (success) {
+          // TODO: This could be used to leverage volatile state flags on the
+          // task. (e.g: "updateError", so that a visual hint can be placed when
+          // rendering it).
+        }
+        else {
+          alert('TODO: Oops. Error found when updating TimeEntry in the database.');
+        }
+      });
+    });
+
     document.addEventListener('timeEntryDeleted', function(e) {
       var deletedTimeEntry = e.detail;
 

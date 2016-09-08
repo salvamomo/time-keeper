@@ -63,13 +63,14 @@ Database.prototype.updateTimeEntry = function(timeEntry, callback) {
   var request = timeEntryStore.put(timeEntry);
   request.onsuccess = function(event) {
     // event.target.result has the time_entry_id.
-    console.log("Time Entry state saved. ID: " + event.target.result);
+    console.log("Time Entry state updated. ID: " + event.target.result);
     if (callback) {
-      callback();
+      callback(true);
     }
   };
   request.onerror = function(event) {
-    alert('TODO: Oops. Error found when updating a TimeEntry in DB.');
+    console.log("Error updating Time Entry state. ID: " + event.target.result);
+    callback(false);
   }
 };
 

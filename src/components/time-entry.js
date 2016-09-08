@@ -177,6 +177,8 @@ TimeEntry.prototype.renderEditable = function() {
             // form be placed in a another function?
             that.setDescription(that.renderedNode.getElementsByClassName('edit-time-entry-description').item(0).value);
             that.render();
+            var updateEvent = new CustomEvent('timeEntryUpdated', { 'detail': that });
+            document.dispatchEvent(updateEvent);
           });
           break;
         case 'delete':
