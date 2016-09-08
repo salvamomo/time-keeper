@@ -5,10 +5,8 @@
 "use strict";
 
 function TimeEntryManager() {
-
   var active_entry;
   var time_entries = [];
-  var last_entry_id = 0;
 
   // TODO: Finish this, and decide where to place it and how to call it.
   // Although IIFE doesn't look too bad.
@@ -27,12 +25,6 @@ function TimeEntryManager() {
       renderTimeEntries();
     });
   })();
-
-  // This should rely on the internal db.
-  function getNextTimeEntryId() {
-    last_entry_id++;
-    return last_entry_id;
-  }
 
   function addTimeEntry(description) {
     var timeEntry = new TimeEntry(description);
@@ -117,7 +109,6 @@ function TimeEntryManager() {
 
   var publicAPI = {
     addTimeEntry: addTimeEntry,
-    getNextTimeEntryId: getNextTimeEntryId,
     getTimeEntries: getTimeEntries,
     getActiveEntry: getActiveEntry,
     setActiveEntry: setActiveEntry,

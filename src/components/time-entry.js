@@ -13,7 +13,11 @@
 // };
 
 function TimeEntry(description) {
-  this.time_entry_id = timeKeeper.TimeEntryManager.getNextTimeEntryId();
+  // Setting time_entry_id to undefined on purpose, as that'll make IndexedDB's
+  // object store generate the ID for it according to the records present in the
+  // database.
+  this.time_entry_id = undefined;
+
   this.description = description;
   this.date = new Date();
   this.active = false;
