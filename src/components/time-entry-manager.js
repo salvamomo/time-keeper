@@ -85,8 +85,10 @@ function TimeEntryManager() {
   (function addEventListeners() {
     document.addEventListener('timeEntryStopped', function(e) {
       timeKeeper.TimeEntryManager.unsetActiveEntry();
-      console.log(timeKeeper.TimeEntryManager.getActiveEntry());
-      // timeKeeper.db.updateTimeEntry(timeKeeper.TimeEntryManager.getActiveEntry());
+      var stoppedEntry = e.detail;
+      timeKeeper.db.updateTimeEntry(stoppedEntry, function() {
+        // TODO: complete.
+      });
     });
 
     document.addEventListener('timeEntryResumed', function(e) {

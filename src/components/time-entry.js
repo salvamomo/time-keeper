@@ -15,17 +15,16 @@
 // TODO: Need a lightweight way of storing the currently-running task info, in
 // case there's a crash of the application, it can be resumed where it stopped,
 // without losing the time passed since the crash (or the close event).
-function TimeEntry(description) {
-  // Set time_entry_id to null. It'll be populated when saving the time entry
-  // into the database.
-  this.time_entry_id = null;
 
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
-  // Define time_entry_id property so it can be hydrated when retrieving one of
-  // the entries from database. However, make it non-enumerable, so that it's
-  // not automagically read by IndexedDB, which will avoid making it think that
-  // a time_entry_id is being provided.
-  Object.defineProperty(this, 'time_entry_id', { writable: true, enumerable: false });
+// CHECKME: There's certainly a need for some more controller logic for db
+// interactions. time_entry_id can't be defined through Object.defineProperty,
+// because it'll work for entity creation, but not on update, as the db logic
+// can't figure out what entry is being updated (since it can't enum time_entry
+// id as being provided.
+function TimeEntry(description) {
+  // Declare time_entry_id, but set no value. It'll be populated when saving the
+  // time entry into the database.
+  this.time_entry_id;
 
   this.description = description;
   this.date = new Date();
@@ -42,6 +41,10 @@ function TimeEntry(description) {
   this.total_time = 0;
   this.updateIntervalId = null;
   this.renderedNode = null;
+  // Make renderedNode non-enumerable, so that the clone algorithm doesn't try
+  // to clone it when updating the time entry in the DB. This is because DOMNode
+  // properties cannot be cloned.
+  Object.defineProperty(this, 'renderedNode', { writable: true, enumerable: false });
 
   // Display state.
   this.displayMode = 'default';
@@ -269,7 +272,10 @@ TimeEntry.createFromDBObject = function(dbObject) {
   var newTimeEntry = new TimeEntry();
   var timeEntryPropNames = Object.getOwnPropertyNames(newTimeEntry);
 
-  // Hydrate stub with all properties as retrieved from Database.
+  // Set ID first.
+  newTimeEntry.setTimeEntryId(dbObject.time_entry_id);
+
+  // Hydrate stub with all other properties as retrieved from Database.
   timeEntryPropNames.forEach(function(propName, index, propertyNames) {
     if (dbObject.hasOwnProperty(propName)) {
       newTimeEntry[propName] = dbObject[propName];

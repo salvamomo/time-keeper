@@ -60,10 +60,16 @@ Database.prototype.createTimeEntry = function(timeEntry, callback) {
   }
 }
 
-Database.prototype.updateTimeEntry = function(timeEntry) {
+Database.prototype.updateTimeEntry = function(timeEntry, callback) {
   var timeEntryStore = this.db.transaction("time_entry", "readwrite").objectStore("time_entry");
-  timeEntryStore.put(timeEntry);
-
+  var request = timeEntryStore.put(timeEntry);
+  request.onsuccess = function(event) {
+    // event.target.result has the time_entry_id, although it's not needed.
+    callback();
+  }
+  request.onerror = function(event) {
+    alert('TODO: Opps. Error found when updating a TimeEntry in DB.');
+  }
 }
 
 // Returns all the existing time entries in the database.
