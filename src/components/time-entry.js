@@ -159,6 +159,7 @@ TimeEntry.prototype.renderEditable = function() {
   var entryWrapper = this.renderedNode;
 
   var editWidget = document.createElement('div');
+  editWidget.className = 'time-entry-edit-form';
   editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '"><br>' +
     '<span class="edit-time-entry-date">' +  this.date + '</span><br>' +
     '<button type="submit" data-ui-action="save">Save</button>' +
