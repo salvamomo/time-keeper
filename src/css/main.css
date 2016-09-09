@@ -1,0 +1,118 @@
+
+/* Main app holder */
+.app {
+  background: #f1f1f1;
+
+  /* Temp styles for in-browser styling */
+  width: 500px;
+  /*padding: 0 10px;*/
+}
+
+section.widget-region {
+  /* TODO: Check if this will be used or not. */
+}
+.widget {
+  /*padding: 5px 0;*/
+}
+
+section#top-widgets {
+  clear: both;
+  /*background: lightblue;*/
+  /*padding: 3px;*/
+}
+
+section#middle-widgets {
+  clear: both;
+  /*background: #ffb6b0;*/
+  /*padding: 3px;*/
+}
+
+footer {
+  clear: both;
+  padding: 5px;
+}
+
+footer .author-info {
+  font-size: 12px;
+  color: #707070;
+  text-align: center;
+}
+
+/* New time entry widget */
+.widget #new-time-entry-wrapper {
+  clear: both;
+  overflow: hidden;
+  padding: 5px;
+  background: #313131;
+}
+input[type="text"]#new-time-entry-description {
+  box-shadow: none;
+  background: #313131;
+  border: none;
+  color: white;
+
+}
+input[type="text"]#new-time-entry-description::-webkit-input-placeholder {
+  color: white;
+  font-size: 13px;
+}
+input[type="text"]#new-time-entry-description:focus {
+  outline: none;
+  border: 3px solid #bc7900;
+}
+.widget #new-time-entry-wrapper #new-time-entry-description {
+  width: 91%;
+  height: 22px;
+}
+button[type="submit"]#new-time-entry-submit {
+  font-size: 13px;
+  border: none;
+  padding: 4px 6px 3px;
+  background: #bc7900;
+  color: #ffffff;
+}
+.widget #new-time-entry-wrapper #new-time-entry-submit {
+  float: right;
+}
+
+/* List of time entries widget */
+.widget #time-entries-wrapper {
+  /*background: green;*/
+}
+.widget #time-entries-wrapper ul {
+  margin: 0;
+  padding: 5px 0px;
+}
+.widget #time-entries-wrapper ul li {
+  list-style-type: none;
+  border-bottom: 1px solid #cfcfcf;
+  padding: 15px 0px 8px 0px;
+}
+
+/* Individual time entry details */
+#time-entries-wrapper .time-entry-wrapper {
+  min-height: 30px;
+  overflow: auto;
+  padding: 0px 10px;
+}
+#time-entries-wrapper .time-entry-wrapper .time-entry-info {
+  float: left;
+  width: 60%;
+  color: #424242;
+}
+#time-entries-wrapper .time-entry-wrapper .time-entry-info .time-entry-description {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 270px;
+}
+#time-entries-wrapper .time-entry-wrapper .time-entry-actions {
+  float: left;
+}
+#time-entries-wrapper .time-entry-wrapper .time-entry-totals {
+  float: right;
+}
+#time-entries-wrapper .time-entry-wrapper .time-entry-edit-form {
+  padding: 40px 25px;
+}

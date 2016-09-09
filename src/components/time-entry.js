@@ -113,7 +113,7 @@ TimeEntry.prototype.render = function() {
 
   if (this.renderedNode == null) {
     var entryWrapper = document.createElement('div');
-    entryWrapper.className = 'time-entry';
+    entryWrapper.className = 'time-entry-wrapper';
     entryWrapper.dataset['task:id'] = this.time_entry_id;
     this.renderedNode = entryWrapper;
   }
@@ -122,11 +122,18 @@ TimeEntry.prototype.render = function() {
   }
 
   var stop_or_resume = (this.active) ? '<span data-ui-action="stop">Stop</span>' : '<span data-ui-action="resume">Resume</span>';
-  entryWrapper.innerHTML = '<span class="time-entry-description">' + this.description + '&nbsp;&nbsp;&nbsp;</span>' +
-    '<span class="time-entry-time-spent">' + this.formatTimeSpent() + '</span><br>' +
+  entryWrapper.innerHTML = '' +
+    '<div class="time-entry-info">' +
+    '<span class="time-entry-description">' + this.description + '&nbsp;&nbsp;&nbsp;</span>' +
+    '</div>' +
+    '<div class="time-entry-actions">' +
     stop_or_resume +
     '<span data-ui-action="edit">Edit</span>' +
-    '<span data-ui-action="delete">Delete</span>';
+    '<span data-ui-action="delete">Delete</span>' +
+    '</div>' +
+    '<div class="time-entry-totals">' +
+    '<span class="time-entry-time-spent">' + this.formatTimeSpent() + '</span><br>' +
+    '</div>';
 
   // CHECKME: Make attachBindings a private method of this function?
   this.detachBindings();
@@ -204,9 +211,11 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
   var that = this;
 
   var currentChildElement = null;
-  for (var i = 0; i < entryWrapper.childNodes.length; i++) {
-    if (entryWrapper.childNodes.item(i).hasAttribute('data-ui-action')) {
-      currentChildElement = entryWrapper.childNodes.item(i);
+  var actionNodes = entryWrapper.getElementsByClassName('time-entry-actions').item(0);
+
+  for (var i = 0; i < actionNodes.childNodes.length; i++) {
+    if (actionNodes.childNodes.item(i).hasAttribute('data-ui-action')) {
+      currentChildElement = actionNodes.childNodes.item(i);
       switch (currentChildElement.getAttribute('data-ui-action')) {
         case 'stop':
           currentChildElement.addEventListener('click', function() {

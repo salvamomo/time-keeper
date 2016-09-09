@@ -39,12 +39,12 @@ function addTimeEntryFormWidget() {
     "<input type='text' id='new-time-entry-description' placeholder='Insert a task description'>" +
     "<button type='submit' id='new-time-entry-submit'>Start</button>" +
     "</div>";
-  document.body.innerHTML += widgetMarkup;
+  document.getElementById('top-widgets').innerHTML += '<div class="widget">' + widgetMarkup + '</div>';
 }
 
 function addTimeEntriesRegion() {
-  var regionWrapper = '<div id="time-entries-wrapper"></div>';
-  document.body.innerHTML += regionWrapper;
+  var regionWrapper = '<div class="widget"><div id="time-entries-wrapper"></div></div>';
+  document.getElementById('middle-widgets').innerHTML += regionWrapper;
   renderTimeEntries();
 }
 
