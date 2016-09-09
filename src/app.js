@@ -37,7 +37,7 @@ function init() {
 function addTimeEntryFormWidget() {
   var widgetMarkup = "<div id='new-time-entry-wrapper'>" +
     "<input type='text' id='new-time-entry-description' placeholder='Insert a task description'>" +
-    "<button type='submit' id='new-time-entry-submit'>Add</button>" +
+    "<button type='submit' id='new-time-entry-submit'>Start</button>" +
     "</div>";
   document.body.innerHTML += widgetMarkup;
 }

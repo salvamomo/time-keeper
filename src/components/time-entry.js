@@ -123,7 +123,7 @@ TimeEntry.prototype.render = function() {
 
   var stop_or_resume = (this.active) ? '<span data-ui-action="stop">Stop</span>' : '<span data-ui-action="resume">Resume</span>';
   entryWrapper.innerHTML = '<span class="time-entry-description">' + this.description + '&nbsp;&nbsp;&nbsp;</span>' +
-    '<span class="time-entry-time-spent">' + this.total_time + '</span><br>' +
+    '<span class="time-entry-time-spent">' + this.formatTimeSpent() + '</span><br>' +
     stop_or_resume +
     '<span data-ui-action="edit">Edit</span>' +
     '<span data-ui-action="delete">Delete</span>';
@@ -263,10 +263,33 @@ TimeEntry.prototype.detachBindings = function() {
 }
 
 TimeEntry.prototype.redraw = function() {
-  console.log('being updated');
   // CHECKME: This can be tackled by simply calling this.render(). However,
   // updating only the actual time seems sensible.
-  this.renderedNode.getElementsByClassName('time-entry-time-spent').item(0).textContent = this.total_time;
+  this.renderedNode.getElementsByClassName('time-entry-time-spent').item(0).textContent = this.formatTimeSpent();
+}
+
+/**
+ * Format the total time tracked on this time entry, in a hh:mm:ss format.
+ *
+ * @returns {string}
+ */
+TimeEntry.prototype.formatTimeSpent = function() {
+  var totalRemainingTime = this.total_time;
+
+  // Add a '0' before a time element if it has only 1 digit.
+  function padTimeComponentString(timeComp) {
+    if (timeComp.toString().length == 1) {
+      timeComp = '0' + timeComp;
+    }
+    return timeComp;
+  }
+
+  // Divide and modulus, divide and modulus. \_o_/.
+  var totalTimeHours =  padTimeComponentString(Math.floor(totalRemainingTime / (60 * 60)));
+  totalRemainingTime = totalRemainingTime % (60 * 60);
+  var totalTimeMinutes = padTimeComponentString(Math.floor(totalRemainingTime / 60));
+  totalRemainingTime = padTimeComponentString(totalRemainingTime % 60);
+  return totalTimeHours + ':' + totalTimeMinutes + ':' + totalRemainingTime;
 }
 
 // This emulates a public static method.
