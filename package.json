@@ -1,5 +1,10 @@
 {
   "name": "time-keeper",
   "version": "0.0.1",
-  "main": "src/index.html"
+  "main": "src/index.html",
+  "window": {
+    "width": 500,
+    "min_width": 500,
+    "min_height": 400
+  }
 }
