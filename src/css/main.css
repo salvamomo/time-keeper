@@ -1,10 +1,12 @@
+body {
+  margin: 0;
+}
 
 /* Main app holder */
 .app {
   background: #f1f1f1;
 
   /* Temp styles for in-browser styling */
-  width: 500px;
   /*padding: 0 10px;*/
 }
 
@@ -17,14 +19,10 @@ section.widget-region {
 
 section#top-widgets {
   clear: both;
-  /*background: lightblue;*/
-  /*padding: 3px;*/
 }
 
 section#middle-widgets {
   clear: both;
-  /*background: #ffb6b0;*/
-  /*padding: 3px;*/
 }
 
 footer {
@@ -44,9 +42,12 @@ footer .author-info {
   overflow: hidden;
   padding: 5px;
   background: #313131;
+  height: 40px;
+}
+.widget #new-time-entry-wrapper .time-entry-form {
+  margin-top: 7px;
 }
 input[type="text"]#new-time-entry-description {
-  box-shadow: none;
   background: #313131;
   border: none;
   color: white;
@@ -61,12 +62,14 @@ input[type="text"]#new-time-entry-description:focus {
   border: 3px solid #bc7900;
 }
 .widget #new-time-entry-wrapper #new-time-entry-description {
-  width: 91%;
+  width: 85%;
   height: 22px;
+  line-height: 27px;
 }
 button[type="submit"]#new-time-entry-submit {
-  font-size: 13px;
   border: none;
+  font-size: 13px;
+  height: 30px;
   padding: 4px 6px 3px;
   background: #bc7900;
   color: #ffffff;
@@ -105,7 +108,7 @@ button[type="submit"]#new-time-entry-submit {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 270px;
+  margin-right: 10px;
 }
 #time-entries-wrapper .time-entry-wrapper .time-entry-actions {
   float: left;
