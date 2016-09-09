@@ -46,6 +46,13 @@ function TimeEntry(description) {
   // to clone it when updating the time entry in the DB. This is because DOMNode
   // properties cannot be cloned.
   Object.defineProperty(this, 'renderedNode', { writable: true, enumerable: false });
+  // updateIntervalId could be stored without problems, but it's a session-dependent
+  // flag, as it related to events attached to the DOM. Storing it will prevent
+  // the proper interval callbacks from being set up when restarting the app.
+  // TODO: Two cases of properties that shouldn't be stored already. This
+  // calls to put them in a special property within the object, for better
+  // tracking of them.
+  Object.defineProperty(this, 'updateIntervalId', { writable: true, enumerable: false });
 
   // Display state.
   this.displayMode = 'default';
