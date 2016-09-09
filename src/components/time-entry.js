@@ -130,6 +130,7 @@ TimeEntry.prototype.render = function() {
 
   var stop_or_resume = (this.active) ? '<span data-ui-action="stop">Stop</span>' : '<span data-ui-action="resume">Resume</span>';
   entryWrapper.innerHTML = '' +
+    '<div class="time-entry-heading">' +
     '<div class="time-entry-info">' +
     '<span class="time-entry-description">' + this.description + '&nbsp;&nbsp;&nbsp;</span>' +
     '</div>' +
@@ -140,6 +141,7 @@ TimeEntry.prototype.render = function() {
     '</div>' +
     '<div class="time-entry-totals">' +
     '<span class="time-entry-time-spent">' + this.formatTimeSpent() + '</span><br>' +
+    '</div>' +
     '</div>';
 
   // CHECKME: Make attachBindings a private method of this function?
@@ -168,7 +170,7 @@ TimeEntry.prototype.renderEditable = function() {
   var editWidget = document.createElement('div');
   editWidget.className = 'time-entry-edit-form';
   editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '"><br>' +
-    '<span class="edit-time-entry-date">' +  this.date + '</span><br>' +
+    '<div class="edit-time-entry-date">' +  this.date + '</div>' +
     '<button type="submit" data-ui-action="save">Save</button>' +
     '<button type="submit" data-ui-action="delete">Delete</button>' +
     '<button type="submit" data-ui-action="cancel">Cancel</button>';

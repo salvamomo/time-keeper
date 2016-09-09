@@ -71,7 +71,8 @@ button[type="submit"]#new-time-entry-submit {
   font-size: 13px;
   height: 30px;
   padding: 4px 6px 3px;
-  background: #bc7900;
+  background: #5cb85c;
+  border: 1px solid #4cae4c;
   color: #ffffff;
 }
 .widget #new-time-entry-wrapper #new-time-entry-submit {
@@ -89,14 +90,16 @@ button[type="submit"]#new-time-entry-submit {
 .widget #time-entries-wrapper ul li {
   list-style-type: none;
   border-bottom: 1px solid #cfcfcf;
-  padding: 15px 0px 8px 0px;
 }
 
 /* Individual time entry details */
 #time-entries-wrapper .time-entry-wrapper {
   min-height: 30px;
   overflow: auto;
-  padding: 0px 10px;
+  padding: 15px 10px 5px;
+}
+#time-entries-wrapper .time-entry-wrapper .time-entry-heading {
+  overflow: auto;
 }
 #time-entries-wrapper .time-entry-wrapper .time-entry-info {
   float: left;
@@ -116,6 +119,39 @@ button[type="submit"]#new-time-entry-submit {
 #time-entries-wrapper .time-entry-wrapper .time-entry-totals {
   float: right;
 }
+/* Individual time entry edit form */
 #time-entries-wrapper .time-entry-wrapper .time-entry-edit-form {
-  padding: 40px 25px;
+  background: #d8d8d8;
+  border-top: 1px solid #ffce56;
+  clear: both;
+  margin-top: 5px;
+  padding: 15px 10px;
+}
+.time-entry-edit-form input[type="text"] {
+  width: 100%;
+}
+.time-entry-edit-form .edit-time-entry-description,
+.time-entry-edit-form .edit-time-entry-date {
+  margin-bottom: 5px;
+}
+.time-entry-edit-form button[type="submit"] {
+  font-size: 13px;
+  height: 25px;
+  background: #337ab7;
+  border: 1px solid #2e6da4;
+  color: #ffffff;
+  font-weight: 500;
+  margin-right: 5px;
+}
+.time-entry-edit-form button[data-ui-action="save"] {
+  background: #337ab7;
+  border: 1px solid #2e6da4;
+}
+.time-entry-edit-form button[data-ui-action="delete"] {
+  background: #d9534f;
+  border: 1px solid #d43f3a;
+}
+.time-entry-edit-form button[data-ui-action="cancel"] {
+  background: #f0ad4e;
+  border: 1px solid #eea236;
 }
