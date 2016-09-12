@@ -270,6 +270,7 @@ TimeEntry.prototype.renderEditable = function() {
     durationInputFields.item(i).addEventListener('change', function stopDurationRefresh(e) {
       clearInterval(that.editFormUpdateIntervalId);
       // One-time event - https://www.sitepoint.com/create-one-time-events-javascript/.
+      // http://stackoverflow.com/questions/19214977/alternative-to-arguments-callee
       e.target.removeEventListener(e.type, stopDurationRefresh);
     });
   }
