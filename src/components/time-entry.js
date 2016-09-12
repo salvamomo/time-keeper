@@ -66,6 +66,10 @@ TimeEntry.prototype.setDescription = function(description) {
   this.description = description;
 }
 
+TimeEntry.prototype.setDate = function(dateObject) {
+  this.date = dateObject;
+}
+
 TimeEntry.prototype.startTimer = function() {
   var now = Date.now();
   this.start_time = now;
@@ -166,10 +170,15 @@ TimeEntry.prototype.renderEditable = function() {
 
   var entryWrapper = this.renderedNode;
 
+
+  var editDateWidget = '<span>Day: </span><input type="number" name="date_day" class="date_day" min="1" max="31" value="' + this.date.getDate() + '">';
+  editDateWidget += '<span>Month: </span><input type="number" name="date_month" class="date_month" min="1" max="12" value="' + (this.date.getMonth() + 1) + '">';
+  editDateWidget += '<span>Year: </span><input type="number" name="date_year" class="date_year" min="2000" value="' + this.date.getFullYear() + '">';
+
   var editWidget = document.createElement('div');
   editWidget.className = 'time-entry-edit-form';
   editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '"><br>' +
-    '<div class="edit-time-entry-date">' +  this.date + '</div>' +
+    '<div class="edit-time-entry-date"><pre>Date:</pre>' +  editDateWidget + '</div>' +
     '<button type="submit" data-ui-action="save">Save</button>' +
     '<button type="submit" data-ui-action="delete">Delete</button>' +
     '<button type="submit" data-ui-action="cancel">Cancel</button>';
@@ -192,6 +201,15 @@ TimeEntry.prototype.renderEditable = function() {
             // CHECKME: Should the logic to hydrate the task object from the
             // form be placed in a another function?
             that.setDescription(that.renderedNode.getElementsByClassName('edit-time-entry-description').item(0).value);
+
+            // Grab new date and store it.
+            var dateInput = that.renderedNode.getElementsByClassName('edit-time-entry-date').item(0);
+            var newDateDay = dateInput.getElementsByClassName('date_day').item(0).value;
+            var newDateMonth = dateInput.getElementsByClassName('date_month').item(0).value;
+            var newDateYear = dateInput.getElementsByClassName('date_year').item(0).value;
+            var newDate = new Date(newDateYear, newDateMonth - 1, newDateDay);
+            that.setDate(newDate);
+            
             that.render();
             var updateEvent = new CustomEvent('timeEntryUpdated', { 'detail': that });
             document.dispatchEvent(updateEvent);
