@@ -98,7 +98,25 @@ Database.prototype.getAllTimeEntries = function(callback) {
   timeEntryStore.openCursor().onsuccess = function(event) {
     var cursor = event.target.result;
 
-    // CHECKME: Need else clause?
+    if (cursor) {
+      timeEntries.push(cursor.value);
+      cursor.continue();
+    }
+    else {
+      callback(timeEntries);
+    }
+  }
+};
+
+// Returns all the existing time entries in the database.
+Database.prototype.getAllTimeEntriesSortedByDate = function(callback) {
+  var timeEntries = [];
+  var timeEntryStore = this.db.transaction("time_entry", "readonly").objectStore("time_entry");
+  var index = timeEntryStore.index("date");
+
+  index.openCursor(null, 'prev').onsuccess = function(event) {
+    var cursor = event.target.result;
+
     if (cursor) {
       timeEntries.push(cursor.value);
       cursor.continue();

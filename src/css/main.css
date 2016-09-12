@@ -85,11 +85,34 @@ button[type="submit"]#new-time-entry-submit {
 }
 .widget #time-entries-wrapper ul {
   margin: 0;
-  padding: 5px 0px;
+  padding: 0px 0px 5px;
 }
 .widget #time-entries-wrapper ul li {
   list-style-type: none;
   border-bottom: 1px solid #cfcfcf;
+}
+
+/* Time entries group */
+#time-entries-wrapper .time-entry-wrapper.time-entry-group {
+  background: #dfdfdf;
+  min-height: 20px;
+  padding: 12px 10px 8px;
+}
+.time-entry-group .time-entry-group-heading {
+  overflow: auto;
+}
+.time-entry-group .time-entry-group-heading .time-entry-group-info {
+  float: left;
+}
+.time-entry-group .time-entry-group-heading .time-entry-group-info .time-entry-group-date {
+  color: #575757;
+  font-size: 14px;
+}
+.time-entry-group .time-entry-group-heading .time-entry-group-total {
+  float: right;
+  color: #575757;
+  font-size: 14px;
+  font-style: italic;
 }
 
 /* Individual time entry details */

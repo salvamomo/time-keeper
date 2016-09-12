@@ -52,14 +52,62 @@ function addTimeEntriesRegion() {
 
 function renderTimeEntries() {
   var timeEntries = timeKeeper.TimeEntryManager.getTimeEntries();
+
+  // Add a '0' before a time element if it has only 1 digit.
+  function padTimeComponentString(timeComp) {
+    if (timeComp.toString().length == 1) {
+      timeComp = '0' + timeComp;
+    }
+    return timeComp;
+  }
+
   if (timeEntries) {
     document.getElementById('time-entries-wrapper').innerHTML = '<ul></ul>';
 
     var entry_markup = '';
     var entry_list_container = document.getElementById('time-entries-wrapper').getElementsByTagName('ul').item(0);
 
+    var totalTimesByDate = [];
+    var weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    // TODO: Optimize this and the loop below in a single loop.
     timeEntries.forEach(function(timeEntry, index, entriesList) {
       if (timeEntry instanceof TimeEntry) {
+        if (totalTimesByDate[timeEntry.date.toDateString()] == undefined) {
+          totalTimesByDate[timeEntry.date.toDateString()] = {};
+          totalTimesByDate[timeEntry.date.toDateString()].total_time = 0;
+        }
+        totalTimesByDate[timeEntry.date.toDateString()].total_time += timeEntry.total_time;
+      }
+    });
+
+    timeEntries.forEach(function(timeEntry, index, entriesList) {
+      if (timeEntry instanceof TimeEntry) {
+        // TODO: Clunky. Written in a rush. clean it up!
+        // First item of a given group. Render group heading and remove it from
+        // groups array.
+        if (totalTimesByDate[timeEntry.date.toDateString()].rendered == undefined) {
+          var totalTimeFormattedHours =  padTimeComponentString(Math.floor(totalTimesByDate[timeEntry.date.toDateString()].total_time / (60 * 60)));
+          var totalTimeFormattedMinutes = padTimeComponentString(Math.floor((totalTimesByDate[timeEntry.date.toDateString()].total_time % (60 * 60)) / 60));
+          var formattedGroupDate = weekDays[timeEntry.date.getDay()] + ', ' + padTimeComponentString(timeEntry.date.getDate()) + ' ' + monthNames[timeEntry.date.getMonth()];
+
+          var groupNode = document.createElement('div');
+          groupNode.className = 'time-entry-wrapper time-entry-group';
+          groupNode.innerHTML = '<div class="time-entry-group-heading">' +
+            '<div class="time-entry-group-info">' +
+            '<span class="time-entry-group-date">' + formattedGroupDate + '</span>' +
+            '</div>' +
+            '<div class="time-entry-group-total">' +
+            '<span class="time-entry-group-total-spent">' + totalTimeFormattedHours + ':' + totalTimeFormattedMinutes + '</span>' +
+            '</div>' +
+            '</div>';
+
+          entry_list_container.appendChild(document.createElement('li')).appendChild(groupNode);
+          totalTimesByDate[timeEntry.date.toDateString()].rendered = true;
+        }
+
+
         entry_markup = timeEntry.render();
         entry_list_container.appendChild(document.createElement('li')).appendChild(entry_markup);
       }

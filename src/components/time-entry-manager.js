@@ -13,8 +13,10 @@ function TimeEntryManager() {
   (function getTimeEntriesFromDb() {
     var timeEntryFromDb = null;
 
-    // All this should be probably an exposed "loadTimeEntries" method.
-    timeKeeper.db.getAllTimeEntries(function(timeEntries) {
+    // TODO: When preferences are implemented, or a widget to show more entries,
+    // Make this show only entries for the last week / month by default.
+    // CHECKME: All this should be probably an exposed "loadTimeEntries" method.
+    timeKeeper.db.getAllTimeEntriesSortedByDate(function(timeEntries) {
       for (var i = 0; i < timeEntries.length; i++) {
         // Any other better way of loading this as an actual TimeEntry object?
         timeEntryFromDb = TimeEntry.createFromDBObject(timeEntries[i])
