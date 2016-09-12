@@ -46,7 +46,7 @@ function TimeEntryManager() {
     }
 
     timeEntry.startTimer();
-    time_entries.push(timeEntry);
+    time_entries.unshift(timeEntry);
 
     // TODO: Add error handling here. seriously. Add it!
     timeKeeper.db.createTimeEntry(timeEntry, function(time_entry_id) {
