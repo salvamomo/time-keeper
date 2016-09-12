@@ -129,13 +129,14 @@ TimeEntry.prototype.render = function() {
 
   if (this.renderedNode == null) {
     var entryWrapper = document.createElement('div');
-    entryWrapper.className = 'time-entry-wrapper';
     entryWrapper.dataset['task:id'] = this.time_entry_id;
     this.renderedNode = entryWrapper;
   }
   else {
     entryWrapper = this.renderedNode;
   }
+  // Add class for the current time entry.
+  entryWrapper.className = this.active ? 'time-entry-wrapper active' : 'time-entry-wrapper';
 
   var stop_or_resume = (this.active) ? '<span data-ui-action="stop"><img src="img/stop-icon.png" /></span>' : '<span data-ui-action="resume"><img src="img/play-icon.png" /></span>';
   entryWrapper.innerHTML = '' +

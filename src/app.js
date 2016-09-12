@@ -88,7 +88,7 @@ function renderTimeEntries() {
         // First item of a given group. Render group heading and remove it from
         // groups array.
         if (totalTimesByDate[timeEntry.date.toDateString()].rendered == undefined) {
-          var totalTimeFormattedHours =  padTimeComponentString(Math.floor(totalTimesByDate[timeEntry.date.toDateString()].total_time / (60 * 60)));
+          var totalTimeFormattedHours = Math.floor(totalTimesByDate[timeEntry.date.toDateString()].total_time / (60 * 60));
           var totalTimeFormattedMinutes = padTimeComponentString(Math.floor((totalTimesByDate[timeEntry.date.toDateString()].total_time % (60 * 60)) / 60));
           var formattedGroupDate = weekDays[timeEntry.date.getDay()] + ', ' + padTimeComponentString(timeEntry.date.getDate()) + ' ' + monthNames[timeEntry.date.getMonth()];
 
@@ -99,7 +99,7 @@ function renderTimeEntries() {
             '<span class="time-entry-group-date">' + formattedGroupDate + '</span>' +
             '</div>' +
             '<div class="time-entry-group-total">' +
-            '<span class="time-entry-group-total-spent">' + totalTimeFormattedHours + ':' + totalTimeFormattedMinutes + '</span>' +
+            '<span class="time-entry-group-total-spent">' + totalTimeFormattedHours + ' h ' + totalTimeFormattedMinutes + ' min</span>' +
             '</div>' +
             '</div>';
 

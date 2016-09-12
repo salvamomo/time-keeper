@@ -121,6 +121,9 @@ button[type="submit"]#new-time-entry-submit {
   overflow: auto;
   padding: 15px 10px 5px;
 }
+#time-entries-wrapper .time-entry-wrapper.active {
+  background: #ebfaff;
+}
 #time-entries-wrapper .time-entry-wrapper .time-entry-heading {
   overflow: auto;
 }
