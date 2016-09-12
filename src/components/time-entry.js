@@ -137,7 +137,6 @@ TimeEntry.prototype.render = function() {
     '<div class="time-entry-actions">' +
     stop_or_resume +
     '<span data-ui-action="edit">Edit</span>' +
-    '<span data-ui-action="delete">Delete</span>' +
     '</div>' +
     '<div class="time-entry-totals">' +
     '<span class="time-entry-time-spent">' + this.formatTimeSpent() + '</span><br>' +
@@ -205,7 +204,7 @@ TimeEntry.prototype.renderEditable = function() {
           });
           break;
         case 'cancel':
-          currentChildElement.addEventListener('click', function deleteTimeEntry() {
+          currentChildElement.addEventListener('click', function cancelTimeEntryEditForm() {
             // Simply render task in the default mode.
             that.render();
           });
@@ -240,12 +239,6 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
         case 'edit':
           currentChildElement.addEventListener('click', function() {
             that.renderEditable();
-          });
-          break;
-        case 'delete':
-          currentChildElement.addEventListener('click', function() {
-            var deleteEvent = new CustomEvent('timeEntryDeleted', { 'detail': that });
-            document.dispatchEvent(deleteEvent);
           });
           break;
       }
