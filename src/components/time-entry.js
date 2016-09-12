@@ -70,6 +70,10 @@ TimeEntry.prototype.setDate = function(dateObject) {
   this.date = dateObject;
 }
 
+TimeEntry.prototype.setDuration = function(duration) {
+  this.total_time = duration;
+}
+
 TimeEntry.prototype.startTimer = function() {
   var now = Date.now();
   this.start_time = now;
@@ -171,17 +175,30 @@ TimeEntry.prototype.renderEditable = function() {
   var entryWrapper = this.renderedNode;
 
 
+  // Date Widget.
   var editDateWidget = '<span>Day: </span><input type="number" name="date_day" class="date_day" min="1" max="31" value="' + this.date.getDate() + '">';
   editDateWidget += '<span>Month: </span><input type="number" name="date_month" class="date_month" min="1" max="12" value="' + (this.date.getMonth() + 1) + '">';
   editDateWidget += '<span>Year: </span><input type="number" name="date_year" class="date_year" min="2000" value="' + this.date.getFullYear() + '">';
+
+  // Duration widget.
+  var totalTimeHours = Math.floor(this.total_time / (60 * 60));
+  var totalTimeMinutes = Math.floor((this.total_time - (totalTimeHours * 3600)) / 60);
+  var totalTimeSeconds = Math.floor(this.total_time - (totalTimeHours * 3600) - totalTimeMinutes * 60);
+  var durationWidget = '<pre>Duration:</pre>';
+  durationWidget += '<span>Hours: </span><input type="number" name="duration_hours" class="duration_hours" min="0" value="' + totalTimeHours + '">';
+  durationWidget += '<span>Minutes: </span><input type="number" name="duration_minutes" class="duration_minutes" min="0" max="59" value="' + totalTimeMinutes + '">';
+  durationWidget += '<span>Seconds: </span><input type="number" name="duration_seconds" class="duration_seconds" min="0" max="59" value="' +totalTimeSeconds + '">';
 
   var editWidget = document.createElement('div');
   editWidget.className = 'time-entry-edit-form';
   editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '"><br>' +
     '<div class="edit-time-entry-date"><pre>Date:</pre>' +  editDateWidget + '</div>' +
+    '<div class="edit-time-entry-duration">' +  durationWidget + '</div>' +
+    '<div class="edit-time-entry-actions">' +
     '<button type="submit" data-ui-action="save">Save</button>' +
     '<button type="submit" data-ui-action="delete">Delete</button>' +
-    '<button type="submit" data-ui-action="cancel">Cancel</button>';
+    '<button type="submit" data-ui-action="cancel">Cancel</button>' +
+    '</div>';
 
   // CHECKME: attachBindings. => detachBindings required? DOM API doesn't seem
   // to have a clear way of getting eventListeners attached an element, so it'd
@@ -192,10 +209,12 @@ TimeEntry.prototype.renderEditable = function() {
   var that = this;
 
   var currentChildElement = null;
-  for (var i = 0; i < editWidget.childNodes.length; i++) {
-    if (editWidget.childNodes.item(i).hasAttribute('data-ui-action')) {
-      currentChildElement = editWidget.childNodes.item(i);
-      switch (editWidget.childNodes.item(i).getAttribute('data-ui-action')) {
+  var widgetActionButtons = editWidget.getElementsByClassName('edit-time-entry-actions').item(0);
+
+  for (var i = 0; i < widgetActionButtons.childNodes.length; i++) {
+    if (widgetActionButtons.childNodes.item(i).hasAttribute('data-ui-action')) {
+      currentChildElement = widgetActionButtons.childNodes.item(i);
+      switch (currentChildElement.getAttribute('data-ui-action')) {
         case 'save':
           currentChildElement.addEventListener('click', function saveTimeEntryChanges() {
             // CHECKME: Should the logic to hydrate the task object from the
@@ -209,7 +228,15 @@ TimeEntry.prototype.renderEditable = function() {
             var newDateYear = dateInput.getElementsByClassName('date_year').item(0).value;
             var newDate = new Date(newDateYear, newDateMonth - 1, newDateDay);
             that.setDate(newDate);
-            
+
+            // Grab new duration and store it.
+            var durationInput = that.renderedNode.getElementsByClassName('edit-time-entry-duration').item(0);
+            var newDurationHours = durationInput.getElementsByClassName('duration_hours').item(0).value;
+            var newDurationMinutes = durationInput.getElementsByClassName('duration_minutes').item(0).value;
+            var newDurationSeconds = durationInput.getElementsByClassName('duration_seconds').item(0).value;
+            var newDuration = Number((newDurationHours * 3600)) + Number((newDurationMinutes * 60)) + Number(newDurationSeconds);
+            that.setDuration(newDuration);
+
             that.render();
             var updateEvent = new CustomEvent('timeEntryUpdated', { 'detail': that });
             document.dispatchEvent(updateEvent);

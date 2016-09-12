@@ -149,6 +149,13 @@ button[type="submit"]#new-time-entry-submit {
   margin-right: 5px;
   max-width: 40px;
 }
+.time-entry-edit-form .edit-time-entry-duration input {
+  margin-right: 5px;
+  max-width: 30px;
+}
+.time-entry-edit-form .edit-time-entry-actions {
+  margin-top: 10px;
+}
 .time-entry-edit-form button[type="submit"] {
   font-size: 13px;
   height: 25px;
