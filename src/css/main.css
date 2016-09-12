@@ -103,7 +103,7 @@ button[type="submit"]#new-time-entry-submit {
 }
 #time-entries-wrapper .time-entry-wrapper .time-entry-info {
   float: left;
-  width: 60%;
+  width: 65%;
   color: #424242;
 }
 #time-entries-wrapper .time-entry-wrapper .time-entry-info .time-entry-description {
@@ -114,7 +114,18 @@ button[type="submit"]#new-time-entry-submit {
   margin-right: 10px;
 }
 #time-entries-wrapper .time-entry-wrapper .time-entry-actions {
-  float: left;
+  float: right;
+  margin: 0 10px;
+}
+.time-entry-actions span {
+  margin: 0 3px;
+  cursor: pointer;
+}
+.time-entry-actions span img {
+  width: 20px;
+}
+.time-entry-actions span:hover {
+  opacity: 0.6;
 }
 #time-entries-wrapper .time-entry-wrapper .time-entry-totals {
   float: right;

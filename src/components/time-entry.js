@@ -128,18 +128,18 @@ TimeEntry.prototype.render = function() {
     entryWrapper = this.renderedNode;
   }
 
-  var stop_or_resume = (this.active) ? '<span data-ui-action="stop">Stop</span>' : '<span data-ui-action="resume">Resume</span>';
+  var stop_or_resume = (this.active) ? '<span data-ui-action="stop"><img src="img/stop-icon.png" /></span>' : '<span data-ui-action="resume"><img src="img/play-icon.png" /></span>';
   entryWrapper.innerHTML = '' +
     '<div class="time-entry-heading">' +
     '<div class="time-entry-info">' +
     '<span class="time-entry-description">' + this.description + '&nbsp;&nbsp;&nbsp;</span>' +
     '</div>' +
-    '<div class="time-entry-actions">' +
-    stop_or_resume +
-    '<span data-ui-action="edit">Edit</span>' +
-    '</div>' +
     '<div class="time-entry-totals">' +
     '<span class="time-entry-time-spent">' + this.formatTimeSpent() + '</span><br>' +
+    '</div>' +
+    '<div class="time-entry-actions">' +
+    stop_or_resume +
+    '<span data-ui-action="edit"><img src="img/edit-icon.png" /></span>' +
     '</div>' +
     '</div>';
 
