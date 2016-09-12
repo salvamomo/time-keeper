@@ -15,6 +15,7 @@ module.exports = {
 
 function createTrayIcon() {
   // Create a tray icon and give it a menu.
+  // http://stackoverflow.com/questions/12714923/os-x-icons-size/24702329#24702329
   var tray = new gui.Tray({ icon: 'assets/img/tray-icon.png' });
 
   var menu = new gui.Menu();
