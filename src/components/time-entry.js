@@ -41,6 +41,7 @@ function TimeEntry(description) {
   // Total accumulated time on this task.
   this.total_time = 0;
   this.updateIntervalId = null;
+  this.editFormUpdateIntervalId;
   this.renderedNode = null;
   // Make renderedNode non-enumerable, so that the clone algorithm doesn't try
   // to clone it when updating the time entry in the DB. This is because DOMNode
@@ -185,9 +186,9 @@ TimeEntry.prototype.renderEditable = function() {
   var totalTimeMinutes = Math.floor((this.total_time - (totalTimeHours * 3600)) / 60);
   var totalTimeSeconds = Math.floor(this.total_time - (totalTimeHours * 3600) - totalTimeMinutes * 60);
   var durationWidget = '<pre>Duration:</pre>';
-  durationWidget += '<span>Hours: </span><input type="number" name="duration_hours" class="duration_hours" min="0" value="' + totalTimeHours + '">';
-  durationWidget += '<span>Minutes: </span><input type="number" name="duration_minutes" class="duration_minutes" min="0" max="59" value="' + totalTimeMinutes + '">';
-  durationWidget += '<span>Seconds: </span><input type="number" name="duration_seconds" class="duration_seconds" min="0" max="59" value="' +totalTimeSeconds + '">';
+  durationWidget += '<span>Hours: </span><input type="number" name="duration_hours" class="duration_input duration_hours" min="0" value="' + totalTimeHours + '">';
+  durationWidget += '<span>Minutes: </span><input type="number" name="duration_minutes" class="duration_input duration_minutes" min="0" max="59" value="' + totalTimeMinutes + '">';
+  durationWidget += '<span>Seconds: </span><input type="number" name="duration_seconds" class="duration_input duration_seconds" min="0" max="59" value="' +totalTimeSeconds + '">';
 
   var editWidget = document.createElement('div');
   editWidget.className = 'time-entry-edit-form';
@@ -237,6 +238,7 @@ TimeEntry.prototype.renderEditable = function() {
             var newDuration = Number((newDurationHours * 3600)) + Number((newDurationMinutes * 60)) + Number(newDurationSeconds);
             that.setDuration(newDuration);
 
+            clearInterval(that.editFormUpdateIntervalId);
             that.render();
             var updateEvent = new CustomEvent('timeEntryUpdated', { 'detail': that });
             document.dispatchEvent(updateEvent);
@@ -244,18 +246,45 @@ TimeEntry.prototype.renderEditable = function() {
           break;
         case 'delete':
           currentChildElement.addEventListener('click', function deleteTimeEntry() {
+            clearInterval(that.editFormUpdateIntervalId);
             var deleteEvent = new CustomEvent('timeEntryDeleted', { 'detail': that });
             document.dispatchEvent(deleteEvent);
           });
           break;
         case 'cancel':
           currentChildElement.addEventListener('click', function cancelTimeEntryEditForm() {
+            clearInterval(that.editFormUpdateIntervalId);
             // Simply render task in the default mode.
             that.render();
           });
           break;
       }
     }
+  }
+
+  // Create an event to stop the refreshing of the duration field if the user
+  // tries to edit it. Otherwise, the real duration will overwrite the entered
+  // value constantly, making the edit action impossible!
+  var durationInputFields = editWidget.getElementsByClassName('duration_input');
+  for (var i = 0; i < durationInputFields.length; i++) {
+    durationInputFields.item(i).addEventListener('change', function stopDurationRefresh(e) {
+      clearInterval(that.editFormUpdateIntervalId);
+      // One-time event - https://www.sitepoint.com/create-one-time-events-javascript/.
+      e.target.removeEventListener(e.type, stopDurationRefresh);
+    });
+  }
+
+  if (this.active) {
+    this.editFormUpdateIntervalId = setInterval(function() {
+      // Redraw tracked time in edit form.
+      var totalTimeHours = Math.floor(that.total_time / (60 * 60));
+      var totalTimeMinutes = Math.floor((that.total_time - (totalTimeHours * 3600)) / 60);
+      var totalTimeSeconds = Math.floor(that.total_time - (totalTimeHours * 3600) - totalTimeMinutes * 60);
+
+      that.renderedNode.getElementsByClassName('duration_hours').item(0).value = totalTimeHours;
+      that.renderedNode.getElementsByClassName('duration_minutes').item(0).value = totalTimeMinutes;
+      that.renderedNode.getElementsByClassName('duration_seconds').item(0).value = totalTimeSeconds;
+    }, 1000);
   }
 
   entryWrapper.appendChild(editWidget);
