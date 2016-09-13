@@ -94,8 +94,13 @@ function TimeEntryManager() {
   // events to be binded more than once.
   (function addEventListeners() {
     document.addEventListener('timeEntryStopped', function(e) {
-      timeKeeper.TimeEntryManager.unsetActiveEntry();
       var stoppedEntry = e.detail;
+      // Check the task stopped is the active one, before assuming it is. It
+      // could be that a 'stopped' event is triggered when the task is going to
+      // be deleted.
+      if (stoppedEntry === timeKeeper.TimeEntryManager.getActiveEntry()) {
+        timeKeeper.TimeEntryManager.unsetActiveEntry();
+      }
       timeKeeper.db.updateTimeEntry(stoppedEntry, function() {
         // Check me: Want to add anything here?
       });
