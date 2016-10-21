@@ -1,0 +1,29 @@
+General:
+
+- INDEXEDDB: Store / Read preferences when changing them and on startup.
+- Check tray icon is not present before adding it. Check if it’s needed to add it through bg-script (reloading app adds it multiple times).
+- Create normal menu links.
+- Create right-click menu links for app.
+- Add a “preferences” / “settings” page.
+- Create distributable for OSX.
+
+Time Tracking:
+
+- When continuing a task from previous day, duplicate it for current day.
+- Refresh total spent on a day when a task is updated manually, and on 1-minute intervals for the current day.
+- Create “About” page / section.
+- Add keyboard shortcuts.
+- Remove node webkit’s default toolbar.
+- Create a module-based widget system for things like the ‘add entry’ form widget.
+- Show active entry at the top of the list always? (not sure about this).
+
+IDEAS:
+
+- UI Widgets could follow a module pattern, and get the TimeEntryManager as a dependency, so the whole logic for
+  submitting a new entry and add it to the TimeEntryManager is not even touched in the main JS file.
+
+- TimeEntryManager using some kind of “plugin” system that allows other classes (TimeEntry) to directly map events with methods of the manager, so that these don’t need to pass through the main js file.
+- Include simple ModuleLoader in the main class to define modules for the widgets / plugins?
+
+- Field classes and data attributes for buttons and binding with fields. Maybe use just data attrs?
+	e.g: data-ui-action // data-ui-field.
