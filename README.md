@@ -10,5 +10,7 @@ You're welcome to fork, adapt, change, extend to your needs and use it to track
 the time spent on a daily basis, but don't take the code in here as an example
 of good code or good practice of anything! At least, not in its current state.
 
+This was done as part of my Code Enigma (https://www.codeenigma.com/) labs in 2016.
+
 Also, you can contemplate a giant crab attacking a city in the picture below:
 ![Giant Crab](http://roberthood.net/blog/wp-content/uploads/2008/05/_incredible_giant_crab_redux_by_vegasmike.jpg)
