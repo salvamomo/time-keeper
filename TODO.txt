@@ -9,7 +9,6 @@ General:
 
 Time Tracking:
 
-- When continuing a task from previous day, duplicate it for current day.
 - Refresh total spent on a day when a task is updated manually, and on 1-minute intervals for the current day.
 - Create “About” page / section.
 - Add keyboard shortcuts.

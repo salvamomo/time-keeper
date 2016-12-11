@@ -113,8 +113,23 @@ function TimeEntryManager() {
         activeEntry.stopTimer();
       }
       var resumedTimeEntry = e.detail;
-      timeKeeper.TimeEntryManager.setActiveEntry(resumedTimeEntry);
-      timeKeeper.db.updateTimeEntry(resumedTimeEntry);
+
+      // If entry was created in a day previous to today. Resume as a new one.
+      var today = new Date();
+
+      if (today.getDate() > resumedTimeEntry.date.getDate()
+        || today.getMonth() > resumedTimeEntry.date.getMonth()
+        || today.getFullYear() > resumedTimeEntry.date.getFullYear()) {
+          timeKeeper.TimeEntryManager.addTimeEntry(resumedTimeEntry.description);
+      }
+      // Else, just resume timer.
+      else {
+        // At the moment, this is the same than starting from 0.
+        // TODO: Do away with these 3 lines and place them in setActiveEntry?
+        resumedTimeEntry.startTimer();
+        timeKeeper.TimeEntryManager.setActiveEntry(resumedTimeEntry);
+        timeKeeper.db.updateTimeEntry(resumedTimeEntry);
+      }
     });
 
     document.addEventListener('timeEntryUpdated', function(e) {

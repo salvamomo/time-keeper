@@ -100,17 +100,8 @@ TimeEntry.prototype.stopTimer = function() {
 
 TimeEntry.prototype.resumeTimer = function() {
   if (this.active == false && this.total_time > 0) {
-    // At the moment, this is the same than starting from 0.
-    this.startTimer();
-
-    // CHECKME: This only works if that.resumetimer() is called at the
-    // end, instead of at the beginning. Maybe something I'm missing
-    // with async behaviour?.
     var resumedEvent = new CustomEvent('timeEntryResumed', { 'detail': this });
-    console.log('Before start');
     document.dispatchEvent(resumedEvent);
-    console.log('After start');
-
     this.render();
   }
 }
