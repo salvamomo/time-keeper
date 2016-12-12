@@ -9,7 +9,9 @@ General:
 
 Time Tracking:
 
-- Refresh total spent on a day when a task is updated manually, and on 1-minute intervals for the current day.
+- Save current working time to the DB every X seconds.
+- Sometimes the current day is invalid (e.g: Showing monday when it's Sunday).
+- On edit form, don't refresh an input element if cursor is over it.
 - Create “About” page / section.
 - Add keyboard shortcuts.
 - Remove node webkit’s default toolbar.

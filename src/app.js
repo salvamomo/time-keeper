@@ -52,14 +52,7 @@ function addTimeEntriesRegion() {
 
 function renderTimeEntries() {
   var timeEntries = timeKeeper.TimeEntryManager.getTimeEntries();
-
-  // Add a '0' before a time element if it has only 1 digit.
-  function padTimeComponentString(timeComp) {
-    if (timeComp.toString().length == 1) {
-      timeComp = '0' + timeComp;
-    }
-    return timeComp;
-  }
+  var currentEntryGroupInterval = false;
 
   if (timeEntries) {
     document.getElementById('time-entries-wrapper').innerHTML = '<ul></ul>';
@@ -88,20 +81,33 @@ function renderTimeEntries() {
         // First item of a given group. Render group heading and remove it from
         // groups array.
         if (totalTimesByDate[timeEntry.date.toDateString()].rendered == undefined) {
-          var totalTimeFormattedHours = Math.floor(totalTimesByDate[timeEntry.date.toDateString()].total_time / (60 * 60));
-          var totalTimeFormattedMinutes = padTimeComponentString(Math.floor((totalTimesByDate[timeEntry.date.toDateString()].total_time % (60 * 60)) / 60));
+          var totalTimeFormatted = formatTimeAsHoursAndMinuted(totalTimesByDate[timeEntry.date.toDateString()].total_time);
           var formattedGroupDate = weekDays[timeEntry.date.getDay()] + ', ' + padTimeComponentString(timeEntry.date.getDate()) + ' ' + monthNames[timeEntry.date.getMonth()];
 
           var groupNode = document.createElement('div');
+          groupNode.dataset['time:entry:group'] = timeEntry.date.toDateString();
+          groupNode.id = timeEntry.date.toDateString();
           groupNode.className = 'time-entry-wrapper time-entry-group';
           groupNode.innerHTML = '<div class="time-entry-group-heading">' +
             '<div class="time-entry-group-info">' +
             '<span class="time-entry-group-date">' + formattedGroupDate + '</span>' +
             '</div>' +
             '<div class="time-entry-group-total">' +
-            '<span class="time-entry-group-total-spent">' + totalTimeFormattedHours + ' h ' + totalTimeFormattedMinutes + ' min</span>' +
+            '<span class="time-entry-group-total-spent">' + totalTimeFormatted + '</span>' +
             '</div>' +
             '</div>';
+
+
+          // Refresh total time every minute for current day.
+          // TODO: This should just work via events. no sense to set an interval
+          // for each second.
+          if (currentEntryGroupInterval === false) {
+            var currentDayEntryGroupId = timeEntry.date.toDateString();
+              currentEntryGroupInterval = setInterval(function() {
+                var groupTotalTime = timeKeeper.TimeEntryManager.getTotalTimeForEntryGroup(currentDayEntryGroupId);
+              document.getElementById(currentDayEntryGroupId).getElementsByClassName('time-entry-group-total-spent').item(0).innerHTML = groupTotalTime;
+            }, 1000);
+          }
 
           entry_list_container.appendChild(document.createElement('li')).appendChild(groupNode);
           totalTimesByDate[timeEntry.date.toDateString()].rendered = true;

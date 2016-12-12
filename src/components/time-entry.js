@@ -355,14 +355,6 @@ TimeEntry.prototype.redraw = function() {
 TimeEntry.prototype.formatTimeSpent = function() {
   var totalRemainingTime = this.total_time;
 
-  // Add a '0' before a time element if it has only 1 digit.
-  function padTimeComponentString(timeComp) {
-    if (timeComp.toString().length == 1) {
-      timeComp = '0' + timeComp;
-    }
-    return timeComp;
-  }
-
   // Divide and modulus, divide and modulus. \_o_/.
   var totalTimeHours =  padTimeComponentString(Math.floor(totalRemainingTime / (60 * 60)));
   totalRemainingTime = totalRemainingTime % (60 * 60);

@@ -76,6 +76,19 @@ function TimeEntryManager() {
     return active_entry;
   }
 
+  function getTotalTimeForEntryGroup(groupDateString) {
+    // TODO: Statically cache this? Don't want to update every time, but might
+    // need to be that way to tackle all scenarios.
+    var totalTimeByDate = 0;
+
+    time_entries.forEach(function(timeEntry, index, timeEntries) {
+      if (timeEntry.date.toDateString() == groupDateString) {
+        totalTimeByDate += timeEntry.total_time;
+      }
+    });
+    return formatTimeAsHoursAndMinuted(totalTimeByDate);
+  }
+
   function setActiveEntry(timeEntry) {
     // CHECKME: Need further checks here?
     active_entry = timeEntry;
@@ -173,6 +186,7 @@ function TimeEntryManager() {
   var publicAPI = {
     addTimeEntry: addTimeEntry,
     getTimeEntries: getTimeEntries,
+    getTotalTimeForEntryGroup: getTotalTimeForEntryGroup,
     getActiveEntry: getActiveEntry,
     setActiveEntry: setActiveEntry,
     unsetActiveEntry: unsetActiveEntry,
