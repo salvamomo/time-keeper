@@ -61,7 +61,7 @@ function renderTimeEntries() {
     var entry_list_container = document.getElementById('time-entries-wrapper').getElementsByTagName('ul').item(0);
 
     var totalTimesByDate = [];
-    var weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     // TODO: Optimize this and the loop below in a single loop.
