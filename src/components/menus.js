@@ -24,11 +24,12 @@ function createTrayIcon() {
     label: 'About',
     click: function() {
       // Create a new window and get it
-      gui.Window.open('about.html', {}, function(new_win) {
-        // And listen to new window's focus event
-        new_win.on('focus', function () {
-          console.log('New window is focused');
-        });
+      gui.Window.open('about.html', {
+        height: 280,
+        width: 300,
+        fullscreen: false,
+        resizable: false,
+        toolbar: false
       });
     }
   };

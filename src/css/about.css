@@ -1,0 +1,26 @@
+body {
+  background: #575757;
+  background-image: url('../../assets/img/tray-icon.png'), linear-gradient(#737373, #5b8768);
+  background-position: 50% 10%;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: #ffffff;
+}
+
+.app-info {
+  margin-top: 120px;
+  color: #ffffff;
+}
+
+.app-info .name,
+.app-info .version {
+  text-align: center;
+}
+
+h1 {
+  color: #e2c99f;
+}
+
+.author-info {
+  text-align: center;
+}

@@ -1,19 +1,13 @@
 General:
 
-- INDEXEDDB: Store / Read preferences when changing them and on startup.
-- Check tray icon is not present before adding it. Check if it’s needed to add it through bg-script (reloading app adds it multiple times).
-- Create normal menu links.
 - Add images to the repo README.
-- Add a “preferences” / “settings” page.
+- Set up menus in background page / script.
+- Check tray icon is not present before adding it. Check if it’s needed to add it through bg-script (reloading app adds it multiple times).
+- Remove node webkit’s default toolbar.
 - Create distributable for OSX.
-- Put menus in background page.
 
 Time Tracking:
 
-- Create “About” page / section.
-- Add keyboard shortcuts.
-- Remove node webkit’s default toolbar.
-- Create a module-based widget system for things like the ‘add entry’ form widget.
 - Show active entry at the top of the list always? (not sure about this).
 
 IDEAS:
@@ -21,10 +15,18 @@ IDEAS:
 - UI Widgets could follow a module pattern, and get the TimeEntryManager as a dependency, so the whole logic for
   submitting a new entry and add it to the TimeEntryManager is not even touched in the main JS file.
 
-- TimeEntryManager using some kind of “plugin” system that allows other classes (TimeEntry) to directly map events with methods of the manager, so that these don’t need to pass through the main js file.
+- TimeEntryManager using some kind of “plugin” system that allows other classes (TimeEntry) to directly map events with methods
+  of the manager, so that these don’t need to pass through the main js file.
+
 - Include simple ModuleLoader in the main class to define modules for the widgets / plugins?
 
 - Field classes and data attributes for buttons and binding with fields. Maybe use just data attrs?
 	e.g: data-ui-action // data-ui-field.
 
 - Create contextual menu links for time entries?
+
+- Add keyboard shortcuts for time entry actions (create, delete, save, etc...).
+
+- Add a “preferences” / “settings” page.
+
+- Create a module-based widget system for things like the ‘add entry’ form widget.

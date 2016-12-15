@@ -18,6 +18,9 @@ window.onload = init;
 function init() {
   console.log("Initialising application");
 
+  // Add the manifest to the global object, for easy access from every window.
+  global.manifest = require('../package.json');
+
   console.log("Starting local database.");
   // TODO: db name should be kept in a list of constants.
   timeKeeper.db = new Database('timeKeeper', function() {
