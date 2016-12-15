@@ -9,7 +9,6 @@ General:
 
 Time Tracking:
 
-- On edit form, don't refresh an input element if cursor is over it.
 - Create “About” page / section.
 - Add keyboard shortcuts.
 - Remove node webkit’s default toolbar.

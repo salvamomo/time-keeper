@@ -254,12 +254,15 @@ TimeEntry.prototype.renderEditable = function() {
     }
   }
 
-  // Create an event to stop the refreshing of the duration field if the user
-  // tries to edit it. Otherwise, the real duration will overwrite the entered
-  // value constantly, making the edit action impossible!
+  // Create an event to stop the refreshing of the duration fields if the user
+  // tries to edit any of them. Otherwise, the real duration will overwrite the
+  // entered value constantly, making the edit action unintuitive.
   var durationInputFields = editWidget.getElementsByClassName('duration_input');
   for (var i = 0; i < durationInputFields.length; i++) {
-    durationInputFields.item(i).addEventListener('change', function stopDurationRefresh(e) {
+    // Use 'input' event instead of 'change', since 'change' doesn't pick up
+    // values being entered with keyboard, just through actual clicks on the
+    // top/down arrows.
+    durationInputFields.item(i).addEventListener('input', function stopDurationRefresh(e) {
       clearInterval(that.editFormUpdateIntervalId);
       // One-time event - https://www.sitepoint.com/create-one-time-events-javascript/.
       // http://stackoverflow.com/questions/19214977/alternative-to-arguments-callee
