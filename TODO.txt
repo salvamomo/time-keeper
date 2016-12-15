@@ -3,9 +3,10 @@ General:
 - INDEXEDDB: Store / Read preferences when changing them and on startup.
 - Check tray icon is not present before adding it. Check if it’s needed to add it through bg-script (reloading app adds it multiple times).
 - Create normal menu links.
-- Create right-click menu links for app.
+- Add images to the repo README.
 - Add a “preferences” / “settings” page.
 - Create distributable for OSX.
+- Put menus in background page.
 
 Time Tracking:
 
@@ -25,3 +26,5 @@ IDEAS:
 
 - Field classes and data attributes for buttons and binding with fields. Maybe use just data attrs?
 	e.g: data-ui-action // data-ui-field.
+
+- Create contextual menu links for time entries?

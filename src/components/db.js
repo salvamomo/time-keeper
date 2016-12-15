@@ -63,7 +63,7 @@ Database.prototype.updateTimeEntry = function(timeEntry, callback) {
   var request = timeEntryStore.put(timeEntry);
   request.onsuccess = function(event) {
     // event.target.result has the time_entry_id.
-    console.log("Time Entry state updated. ID: " + event.target.result);
+    // console.log("Time Entry state updated. ID: " + event.target.result);
     if (callback) {
       callback(true);
     }
