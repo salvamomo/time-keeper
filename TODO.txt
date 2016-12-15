@@ -9,7 +9,6 @@ General:
 
 Time Tracking:
 
-- Save current working time to the DB every X seconds.
 - On edit form, don't refresh an input element if cursor is over it.
 - Create “About” page / section.
 - Add keyboard shortcuts.

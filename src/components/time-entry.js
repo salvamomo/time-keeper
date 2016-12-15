@@ -318,12 +318,13 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
     // to reAttach the updating interval one extra time every time the 'add'
     // button is pressed.
     this.updateIntervalId = setInterval(function() {
-      // TODO: Implement event listener and trigger event so that when task is
-      // updated, the rest of the app knows about it? Not sure it's worth it though.
-      // If not event listener, maybe getters / setters from which to call rendering
-      // logic when needed?
+      // CHECKME: Have a different event type just for the tracked time update?
       that.updateTrackedTime();
-      that.redraw();
+      that.redrawTimeSpent();
+      // Dispatch update event so that time entry manager picks it up and saves
+      // time on the database.
+      var updateEvent = new CustomEvent('timeEntryUpdated', { 'detail': that });
+      document.dispatchEvent(updateEvent);
     }, 1000);
   }
 }
@@ -341,7 +342,7 @@ TimeEntry.prototype.detachBindings = function() {
   clearInterval(this.updateIntervalId);
 }
 
-TimeEntry.prototype.redraw = function() {
+TimeEntry.prototype.redrawTimeSpent = function() {
   // CHECKME: This can be tackled by simply calling this.render(). However,
   // updating only the actual time seems sensible.
   this.renderedNode.getElementsByClassName('time-entry-time-spent').item(0).textContent = this.formatTimeSpent();
