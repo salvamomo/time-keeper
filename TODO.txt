@@ -1,14 +1,9 @@
 General:
 
-- Add images to the repo README.
 - Set up menus in background page / script.
 - Check tray icon is not present before adding it. Check if it’s needed to add it through bg-script (reloading app adds it multiple times).
 - Remove node webkit’s default toolbar.
 - Create distributable for OSX.
-
-Time Tracking:
-
-- Show active entry at the top of the list always? (not sure about this).
 
 IDEAS:
 
@@ -30,3 +25,5 @@ IDEAS:
 - Add a “preferences” / “settings” page.
 
 - Create a module-based widget system for things like the ‘add entry’ form widget.
+
+- Show active entry at the top of the list always? (not sure about this).
