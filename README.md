@@ -7,10 +7,10 @@ This is a sandbox application built to learn some of the NW.js fundamentals, as
 well as digging into some of the not-so-common concepts and elements of the 
 JavaScript language.
 
-![Time Keeper Main UI](https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_main.png)
+![Time Keeper Main UI](https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_main.jpg)
 
 
-![Time Keeper Edit Entry widget](https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_edit_time_entry.png)
+![Time Keeper Edit Entry widget](https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_edit_time_entry.jpg)
 
 First working version was done as part of my Code Enigma (https://www.codeenigma.com/) labs in 2016.
 
