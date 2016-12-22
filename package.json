@@ -1,6 +1,11 @@
 {
   "name": "time-keeper",
   "version": "0.1.0",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/salvamomo/time-keeper.git"
+  },
+  "license" : "BSD-3-Clause",
   "main": "src/index.html",
   "window": {
     "width": 500,
