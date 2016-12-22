@@ -3,12 +3,13 @@
  */
 
 // Load required packages.
-var menus = require('./components/menus');
 // var db = require('./components/db');
 // var timeEntries = require('./components/time-entry');
 
 // When window is ready, initialise app.
 var timeKeeper = timeKeeper || { settings: {}};
+timeKeeper.menus = require('./components/menus');
+timeKeeper.windows = {};
 
 window.onload = init;
 
@@ -26,8 +27,8 @@ function init() {
   timeKeeper.db = new Database('timeKeeper', function() {
     // TimeEntryManager file loaded from index.html.
     timeKeeper.TimeEntryManager = TimeEntryManager();
+    timeKeeper.menus.init(timeKeeper.windows);
 
-    menus.init();
     // Add widget to create a new time entry.
     addTimeEntryFormWidget();
     // Add region for time entries. (Time entries manager).

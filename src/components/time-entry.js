@@ -91,9 +91,7 @@ TimeEntry.prototype.stopTimer = function() {
 
   // Trigger event about entry being stopped.
   var stoppedEvent = new CustomEvent('timeEntryStopped', { 'detail': this });
-  console.log('Before stop');
   document.dispatchEvent(stoppedEvent);
-  console.log('After stop');
 
   this.render();
 }
