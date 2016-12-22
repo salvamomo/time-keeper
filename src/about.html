@@ -12,7 +12,8 @@
                 <div class="version">
                     <p>
                         <script>
-                            document.write("Version " + global.manifest.version);
+                            var nw = require('nw.gui');
+                            document.write("Version " + nw.App.manifest.version);
                         </script>
                     </p>
                 </div>
