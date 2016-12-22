@@ -1,7 +1,5 @@
 General:
 
-- Check tray icon is not present before adding it. Check if it’s needed to add it through bg-script (reloading app adds it multiple times).
-- Remove node webkit’s default toolbar.
 - Create distributable for OSX.
 
 IDEAS:
