@@ -19,19 +19,19 @@ window.onload = init;
 function init() {
   console.log("Initialising application");
   console.log("Starting local database.");
-  
+
   // TODO: db name should be kept in a list of constants.
   timeKeeper.db = new Database('timeKeeper', function() {
-    // TimeEntryManager file loaded from index.html.
-    timeKeeper.TimeEntryManager = TimeEntryManager();
-    timeKeeper.menus.init(timeKeeper.windows);
-
     // Add widget to create a new time entry.
     addTimeEntryFormWidget();
     // Add region for time entries. (Time entries manager).
     addTimeEntriesRegion();
     // Add bindings.
     addBindings();
+
+    // TimeEntryManager file loaded from index.html.
+    timeKeeper.TimeEntryManager = TimeEntryManager();
+    timeKeeper.menus.init(timeKeeper.windows);
   });
 }
 
@@ -52,7 +52,7 @@ function addTimeEntriesRegion() {
 }
 
 function renderTimeEntries() {
-  var timeEntries = timeKeeper.TimeEntryManager.getTimeEntries();
+  var timeEntries = (timeKeeper.TimeEntryManager != undefined) ? timeKeeper.TimeEntryManager.getTimeEntries() : [];
   var currentEntryGroupInterval = false;
 
   if (timeEntries) {
