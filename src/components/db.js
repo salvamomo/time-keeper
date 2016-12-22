@@ -38,7 +38,7 @@ function Database(name, callback) {
 
     // CHECKME: How would I need to check current version to find out what
     // needs adding on each db version?
-    var objectStore = db.createObjectStore("time_entry", { keyPath: 'time_entry_id' , autoIncrement: true });
+    var objectStore = that.db.createObjectStore("time_entry", { keyPath: 'time_entry_id' , autoIncrement: true });
     objectStore.createIndex('date', 'date');
 
     objectStore.transaction.oncomplete = function(event) {

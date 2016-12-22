@@ -1,7 +1,3 @@
-General:
-
-- Create distributable for OSX.
-
 IDEAS:
 
 - UI Widgets could follow a module pattern, and get the TimeEntryManager as a dependency, so the whole logic for
