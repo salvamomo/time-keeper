@@ -6,9 +6,9 @@ A simple NW.js desktop application to track time spent on daily tasks. Written i
 Screenshots
 -----------
 
-<img title="Time Keeper Main UI" src="https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_main.jpg" width=300>
+![Time Keeper Main UI](https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_main.jpg)
 
-<img title="Time Keeper Edit Entry widget" src="https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_edit_time_entry.jpg" width=400>
+![Time Keeper Edit Entry widget](https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_edit_time_entry.jpg)
 
 Features
 --------
