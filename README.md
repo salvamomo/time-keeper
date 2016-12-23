@@ -1,18 +1,11 @@
-Time Keeper App
-===============
+Time Keeper
+===========
 
-A simple NW.js-based desktop time tracker application written in Vanilla JS.
+A simple NW.js desktop application to track time spent on daily tasks. Written in Vanilla JS.
 
-This is a sandbox application built to learn some of the NW.js fundamentals, as
-well as digging into some of the not-so-common concepts and elements of the 
-JavaScript language.
+<img title="Time Keeper Main UI" src="https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_main.png" width=300>
 
-![Time Keeper Main UI](https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_main.jpg)
-
-
-![Time Keeper Edit Entry widget](https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_edit_time_entry.jpg)
-
-First working version was done as part of my Code Enigma (https://www.codeenigma.com/) labs in 2016.
+<img title="Time Keeper Edit Entry widget" src="https://raw.githubusercontent.com/salvamomo/time-keeper/master/doc/images/time_keeper_edit_time_entry.png" width=400>
 
 License
 -------
