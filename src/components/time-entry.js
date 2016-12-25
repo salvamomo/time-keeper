@@ -28,6 +28,7 @@ function TimeEntry(description) {
   this.time_entry_id;
 
   this.description = description;
+  this.project = null;
   this.date = new Date();
   this.active = false;
 
@@ -65,6 +66,10 @@ TimeEntry.prototype.setTimeEntryId = function(timeEntryId) {
 
 TimeEntry.prototype.setDescription = function(description) {
   this.description = description;
+}
+
+TimeEntry.prototype.setProject = function(project) {
+  this.project = project;
 }
 
 TimeEntry.prototype.setDate = function(dateObject) {
@@ -114,6 +119,11 @@ TimeEntry.prototype.updateTrackedTime = function() {
 }
 
 TimeEntry.prototype.render = function() {
+  // If we come from the 'edit' display, make sure it's not refreshed anymore.
+  if (this.displayMode == 'edit' && this.editFormUpdateIntervalId) {
+    clearInterval(this.editFormUpdateIntervalId);
+  }
+
   this.displayMode = 'default';
 
   if (this.renderedNode == null) {
@@ -164,6 +174,7 @@ TimeEntry.prototype.renderEditable = function() {
   this.displayMode = 'edit';
 
   var entryWrapper = this.renderedNode;
+  var projectString = (typeof this.project === "string") ? this.project : '';
 
 
   // Date Widget.
@@ -183,6 +194,7 @@ TimeEntry.prototype.renderEditable = function() {
   var editWidget = document.createElement('div');
   editWidget.className = 'time-entry-edit-form';
   editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '"><br>' +
+    '<input type="text" class="edit-time-entry-project" value="' +  projectString + '"</input>' +
     '<div class="edit-time-entry-date"><pre>Date:</pre>' +  editDateWidget + '</div>' +
     '<div class="edit-time-entry-duration">' +  durationWidget + '</div>' +
     '<div class="edit-time-entry-actions">' +
@@ -211,6 +223,7 @@ TimeEntry.prototype.renderEditable = function() {
             // CHECKME: Should the logic to hydrate the task object from the
             // form be placed in a another function?
             that.setDescription(that.renderedNode.getElementsByClassName('edit-time-entry-description').item(0).value);
+            that.setProject(that.renderedNode.getElementsByClassName('edit-time-entry-project').item(0).value);
 
             // Grab new date and store it.
             var dateInput = that.renderedNode.getElementsByClassName('edit-time-entry-date').item(0);
