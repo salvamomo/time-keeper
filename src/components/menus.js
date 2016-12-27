@@ -4,6 +4,9 @@
 
 "use strict";
 
+/**
+ * Module to group functions related to UI and menu-related elements.
+ */
 function TimeKeeperMenus() {
 
   /**
