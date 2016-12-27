@@ -4,19 +4,6 @@
 
 "use strict";
 
-// module.exports = {
-//
-//   newTimeEntry: function() {
-//     return new TimeEntry();
-//   }
-//
-// };
-
-// TODO: Need a lightweight way of storing the currently-running task info, in
-// case there's a crash of the application, it can be resumed where it stopped,
-// without losing the time passed since the crash (or the close event).
-// Note: with current setup it might not be needed at all.
-
 // CHECKME: There's certainly a need for some more controller logic for db
 // interactions. time_entry_id can't be defined through Object.defineProperty,
 // because it'll work for entity creation, but not on update, as the db logic
@@ -35,8 +22,10 @@ function TimeEntry(description) {
   // start_time of the current session of work on the task.
   this.start_time = null;
 
-  // Time tracked for current session on a task.
-  this.session_time = 0;
+  // Marker to track the last time at which the entry was saved on db. This is
+  // used as a lightweight way to control the time not tracked, in case of app
+  // crashes, or the app getting closed without stopping a task, so that the
+  // time spent in the meantime, can be recovered upon restarting.
   this.last_time_update = 0;
 
   // Total accumulated time on this task.
@@ -51,44 +40,77 @@ function TimeEntry(description) {
   // updateIntervalId could be stored without problems, but it's a session-dependent
   // flag, as it related to events attached to the DOM. Storing it will prevent
   // the proper interval callbacks from being set up when restarting the app.
-  // TODO: Two cases of properties that shouldn't be stored already. This
-  // calls to put them in a special property within the object, for better
-  // tracking of them.
   Object.defineProperty(this, 'updateIntervalId', { writable: true, enumerable: false });
 
   // Display state.
   this.displayMode = 'default';
 }
 
+/**
+ * Sets the timeEntryId of the Time Entry.
+ *
+ * @param timeEntryId
+ *  The Time Entry ID (a positive integer).
+ */
 TimeEntry.prototype.setTimeEntryId = function(timeEntryId) {
   this.time_entry_id = timeEntryId;
-}
+};
 
+/**
+ * Sets the description of the task.
+ *
+ * @param description
+ *  The description of the Time Entry.
+ */
 TimeEntry.prototype.setDescription = function(description) {
   this.description = description;
-}
+};
 
+/**
+ * Sets the project for which the Time Entry applies.
+ *
+ * @param project
+ *  The project the Time Entry applies to.
+ */
 TimeEntry.prototype.setProject = function(project) {
   this.project = project;
-}
+};
 
+/**
+ * Sets the date of the Time Entry.
+ *
+ * @param dateObject
+ *  The date object that indicates the date of the Time Entry.
+ */
 TimeEntry.prototype.setDate = function(dateObject) {
   this.date = dateObject;
-}
+};
 
+/**
+ * Sets the duration (total time spent) of the time entry.
+ *
+ * @param duration
+ *  The total time spent on the time entry (in seconds).
+ */
 TimeEntry.prototype.setDuration = function(duration) {
   this.total_time = duration;
-}
+};
 
+/**
+ * Triggers the logic and flags needed to indicate the Time Entry is running.
+ */
 TimeEntry.prototype.startTimer = function() {
   var now = Date.now();
   this.start_time = now;
   this.last_time_update = now;
   this.active = true;
-}
+};
 
+/**
+ * Triggers logic and flags to indicate the Time Entry is not active anymore.
+ */
 TimeEntry.prototype.stopTimer = function() {
-  // TODO: Implement event listener and so that the redraw logic is simply
+  // TODO: Implement event listener so that the redraw logic is simply
   // triggered automatically?.
   this.updateTrackedTime();
   clearInterval(this.updateIntervalId);
@@ -99,25 +121,35 @@ TimeEntry.prototype.stopTimer = function() {
   document.dispatchEvent(stoppedEvent);
 
   this.render();
-}
+};
 
+/**
+ * Resumes a Time Entry in which time has already been spent.
+ */
 TimeEntry.prototype.resumeTimer = function() {
   if (this.active == false && this.total_time > 0) {
     var resumedEvent = new CustomEvent('timeEntryResumed', { 'detail': this });
     document.dispatchEvent(resumedEvent);
     this.render();
   }
-}
+};
 
+/**
+ * Updates the time tracked in the Time Entry (total time spent).
+ */
 TimeEntry.prototype.updateTrackedTime = function() {
   if (this.start_time && this.active == true) {
     var now = Date.now();
-    this.session_time = ((now - this.start_time) / 1000).toFixed(0);
     this.total_time += +((now - this.last_time_update) / 1000).toFixed(0);
     this.last_time_update = now;
   }
-}
+};
 
+/**
+ * Generates a DOM Element with all the elements needed to display a time entry.
+ *
+ * The javascript behavior bindings are added by this function as well.
+ */
 TimeEntry.prototype.render = function() {
   // If we come from the 'edit' display, make sure it's not refreshed anymore.
   if (this.displayMode == 'edit' && this.editFormUpdateIntervalId) {
@@ -162,8 +194,11 @@ TimeEntry.prototype.render = function() {
   // that would require the main app calling all the binding logic for each
   // element manually.
   return entryWrapper;
-}
+};
 
+/**
+ * Transforms the DOM display of the Time Entry into its 'edit' mode.
+ */
 TimeEntry.prototype.renderEditable = function() {
   // Don't do anything if 'edit' mode is already active.
   // CHECKME: Maybe solve with HTML classes in the element, or a custom data
@@ -295,8 +330,16 @@ TimeEntry.prototype.renderEditable = function() {
   }
 
   entryWrapper.appendChild(editWidget);
-}
+};
 
+/**
+ * Attach javascript bindings to the DOM element that represents the Time Entry.
+ *
+ * @param entryWrapper
+ *  The DOM element that represents the Time Entry.
+ *
+ * @see TimeEntry.prototype.render()
+ */
 TimeEntry.prototype.attachBindings = function(entryWrapper) {
   var that = this;
 
@@ -341,8 +384,7 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
       document.dispatchEvent(updateEvent);
     }, 1000);
   }
-}
-
+};
 
 /**
  * Detach time entry bindings.
@@ -354,13 +396,16 @@ TimeEntry.prototype.attachBindings = function(entryWrapper) {
 TimeEntry.prototype.detachBindings = function() {
   // Only need to clear the update timer interval.
   clearInterval(this.updateIntervalId);
-}
+};
 
+/**
+ * Updates the Time Entry display to redraw the total time spent.
+ */
 TimeEntry.prototype.redrawTimeSpent = function() {
   // CHECKME: This can be tackled by simply calling this.render(). However,
   // updating only the actual time seems sensible.
   this.renderedNode.getElementsByClassName('time-entry-time-spent').item(0).textContent = this.formatTimeSpent();
-}
+};
 
 /**
  * Format the total time tracked on this time entry, in a hh:mm:ss format.
@@ -376,9 +421,18 @@ TimeEntry.prototype.formatTimeSpent = function() {
   var totalTimeMinutes = padTimeComponentString(Math.floor(totalRemainingTime / 60));
   totalRemainingTime = padTimeComponentString(totalRemainingTime % 60);
   return totalTimeHours + ':' + totalTimeMinutes + ':' + totalRemainingTime;
-}
+};
 
-// This emulates a public static method.
+/**
+ * Creates a TimeEntry object with data returned from the Database.
+ *
+ * This emulates a public static "method".
+ *
+ * @param dbObject
+ *  The database stored data
+ * @returns {TimeEntry}
+ *  The relevant TimeEntry object.
+ */
 TimeEntry.createFromDBObject = function(dbObject) {
   // Create TimeEntry stub.
   var newTimeEntry = new TimeEntry();
@@ -394,4 +448,4 @@ TimeEntry.createFromDBObject = function(dbObject) {
     }
   });
   return newTimeEntry;
-}
+};

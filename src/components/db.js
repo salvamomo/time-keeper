@@ -3,26 +3,14 @@
  */
 
 // TODO: This should be a module, and not a class.
-// IDEA: Could do with allowing methods to pass a class name, so that all "read"
-// methods return an object of the relevant class when loading items, a la ORM.
 function Database(name, callback) {
-
-  var db_name = name;
-  var request = null;
-  var db = null;
-  var that = this;
-
   // Yay for ES6 constants!
   const VERSION = 1;
 
-  function dbErrorHandler(event) {
-    // TODO: Add console.log entry with some actual useful info.
-    // Also, return false?.
-    alert("Database error: " + event.target.errorCode);
-  }
-
+  var db = null;
+  var that = this;
   // CHECKME: Probably best in an init() method?
-  var request = window.indexedDB.open(db_name, VERSION);
+  var request = window.indexedDB.open(name, VERSION);
 
   request.onerror = function(event) {
     alert("Database could not be created or opened.");
@@ -46,7 +34,6 @@ function Database(name, callback) {
     }
   }
 
-  //   // readTimeEntry: 'TODO',
 }
 
 Database.prototype.createTimeEntry = function(timeEntry, callback) {

@@ -20,3 +20,8 @@ IDEAS:
 - Create a module-based widget system for things like the ‘add entry’ form widget.
 
 - Show active entry at the top of the list always? (not sure about this).
+
+- Edit widget should not update the time spent unless its value has been changed
+  manually. Otherwise it could change the actual time spent (even if just by
+  milliseconds).
+  
