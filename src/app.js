@@ -17,7 +17,8 @@ function init() {
 
   timeKeeper.menus = TimeKeeperMenus();
   // TODO: db name should be kept in a list of constants.
-  timeKeeper.db = new Database('timeKeeper', function() {
+  timeKeeper.db = tkDatabase('timeKeeper');
+  timeKeeper.db.init(function() {
     // Add widget to create a new time entry.
     addTimeEntryFormWidget();
     // Add region for time entries. (Time entries manager).
