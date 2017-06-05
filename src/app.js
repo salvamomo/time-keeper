@@ -12,12 +12,14 @@ window.onload = init;
  * Main entry point for the application.
  */
 function init() {
+  const databaseName = 'timeKeeper';
+
   console.log("Initialising application");
   console.log("Starting local database.");
 
   timeKeeper.menus = TimeKeeperMenus();
-  // TODO: db name should be kept in a list of constants.
-  timeKeeper.db = tkDatabase('timeKeeper');
+
+  timeKeeper.db = tkDatabase(databaseName);
   timeKeeper.db.init(function() {
     // Add widget to create a new time entry.
     addTimeEntryFormWidget();
@@ -62,7 +64,6 @@ function renderTimeEntries() {
     var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    // TODO: Optimize this and the loop below in a single loop.
     timeEntries.forEach(function(timeEntry, index, entriesList) {
       if (timeEntry instanceof TimeEntry) {
         if (totalTimesByDate[timeEntry.date.toDateString()] == undefined) {
@@ -75,7 +76,6 @@ function renderTimeEntries() {
 
     timeEntries.forEach(function(timeEntry, index, entriesList) {
       if (timeEntry instanceof TimeEntry) {
-        // TODO: Clunky. Written in a rush. clean it up!
         // First item of a given group. Render group heading and remove it from
         // groups array.
         if (totalTimesByDate[timeEntry.date.toDateString()].rendered == undefined) {
@@ -96,9 +96,8 @@ function renderTimeEntries() {
             '</div>';
 
 
-          // Refresh total time every minute for current day.
-          // TODO: This should just work via events. no sense to set an interval
-          // for each second.
+          // Refresh total time every minute for current day (interval set to
+          // every second).
           if (currentEntryGroupInterval === false) {
             var currentDayEntryGroupId = timeEntry.date.toDateString();
               currentEntryGroupInterval = setInterval(function() {

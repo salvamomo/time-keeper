@@ -110,8 +110,6 @@ TimeEntry.prototype.startTimer = function() {
  * Triggers logic and flags to indicate the Time Entry is not active anymore.
  */
 TimeEntry.prototype.stopTimer = function() {
-  // TODO: Implement event listener so that the redraw logic is simply
-  // triggered automatically?.
   this.updateTrackedTime();
   clearInterval(this.updateIntervalId);
   this.active = false;

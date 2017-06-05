@@ -41,3 +41,7 @@ IDEAS:
   bit blurry. Improve the way eventListeners are used in these 2 elements:
   (e.g: 'timeEntryStopped', 'timeEntryResumed', etc..).
 
+- renderTimeEntries() in app.js is a bit clunky. Could be probably optimized
+  and rewritten in a cleaner and more efficient way. (But it works: ¯\_(ツ)_/¯).
+
+
