@@ -23,12 +23,10 @@ function TimeEntryManager() {
         if (timeEntryFromDb) {
           time_entries.push(timeEntryFromDb);
 
-          // If it's the active time entry, keep track of it.
-          // TODO: Add 'isActive' prototype method for it?
-          // Also, worth having a separate variable to control what's the actual
-          // active one, instead of relying on the time entry itself?
+          // Worth having a separate control variable to track what's the actual
+          // active entry, instead of relying on the time entry itself?
           if (timeEntryFromDb.active) {
-            active_entry = timeEntryFromDb;
+            timeKeeper.TimeEntryManager.setActiveEntry(timeEntryFromDb);
           }
         }
       }
@@ -55,7 +53,7 @@ function TimeEntryManager() {
       // refreshing the whole list.
       renderTimeEntries();
     });
-    active_entry = timeEntry;
+    timeKeeper.TimeEntryManager.setActiveEntry(timeEntry);
   }
 
   // CHECKME: would removeTimeEntry() be a better name?
