@@ -50,6 +50,12 @@ function TimeEntryManager() {
     timeKeeper.TimeEntryManager.setActiveEntry(timeEntry);
   }
 
+  function resumeTimeEntry(resumedTimeEntry) {
+    resumedTimeEntry.startTimer();
+    timeKeeper.TimeEntryManager.setActiveEntry(resumedTimeEntry);
+    timeKeeper.db.updateTimeEntry(resumedTimeEntry);
+  }
+
   // CHECKME: would removeTimeEntry() be a better name?
   function deleteTimeEntry(timeEntry) {
     for(var index in time_entries) {
@@ -129,11 +135,7 @@ function TimeEntryManager() {
       }
       // Else, just resume timer.
       else {
-        // At the moment, this is the same than starting from 0.
-        // TODO: Do away with these 3 lines and place them in setActiveEntry?
-        resumedTimeEntry.startTimer();
-        timeKeeper.TimeEntryManager.setActiveEntry(resumedTimeEntry);
-        timeKeeper.db.updateTimeEntry(resumedTimeEntry);
+        resumeTimeEntry(resumedTimeEntry);
       }
     });
 

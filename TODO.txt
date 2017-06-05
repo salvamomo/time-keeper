@@ -33,3 +33,9 @@ IDEAS:
 
 - TimeEntryManager: Use state flags when operating on time entries (e.g:
   'timeEntryUpdated', to indicate possible errors when saving to database, etc).
+
+- TimeEntryManager: Consider moving all the resume / start logic into the
+  setActiveEntry() function (startTimer, updateTimeEntry...).
+
+- Responsibility in some logic between time entries and TimeEntryManager is a
+  bit blurry.
