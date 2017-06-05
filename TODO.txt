@@ -27,3 +27,9 @@ IDEAS:
 
 - Implement preferences so that by default only entries from the last X days are
   loaded when opening the app. (Include "show more..." button, etc).
+
+- TimeEntryManager: When adding new entry, consider adding just that one,
+  and not refreshing the whole list.
+
+- TimeEntryManager: Use state flags when operating on time entries (e.g:
+  'timeEntryUpdated', to indicate possible errors when saving to database, etc).

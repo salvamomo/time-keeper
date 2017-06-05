@@ -45,8 +45,6 @@ function TimeEntryManager() {
     // TODO: Add error handling here. seriously. Add it!
     timeKeeper.db.createTimeEntry(timeEntry, function(time_entry_id) {
       timeEntry.setTimeEntryId(time_entry_id);
-      // TODO: This should just add a new task to the list, rather than
-      // refreshing the whole list.
       renderTimeEntries();
     });
     timeKeeper.TimeEntryManager.setActiveEntry(timeEntry);
@@ -142,13 +140,8 @@ function TimeEntryManager() {
     document.addEventListener('timeEntryUpdated', function(e) {
       var updatedEntry = e.detail;
       timeKeeper.db.updateTimeEntry(updatedEntry, function(success) {
-        if (success) {
-          // TODO: This could be used to leverage volatile state flags on the
-          // task. (e.g: "updateError", so that a visual hint can be placed when
-          // rendering it).
-        }
-        else {
-          alert('TODO: Oops. Error found when updating TimeEntry in the database.');
+        if (success === false) {
+          alert('Oops. An error happened when updating the TimeEntry in the database.');
         }
       });
     });
