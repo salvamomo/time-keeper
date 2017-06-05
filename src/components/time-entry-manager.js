@@ -42,10 +42,14 @@ function TimeEntryManager() {
     timeEntry.startTimer();
     time_entries.unshift(timeEntry);
 
-    // TODO: Add error handling here. seriously. Add it!
     timeKeeper.db.createTimeEntry(timeEntry, function(time_entry_id) {
-      timeEntry.setTimeEntryId(time_entry_id);
-      renderTimeEntries();
+      if (Number.isInteger(time_entry_id)) {
+        timeEntry.setTimeEntryId(time_entry_id);
+        renderTimeEntries();
+      }
+      else if (time_entry_id === false) {
+        alert('Oops. There was an error creating the new time entry. Please try again.');
+      }
     });
     timeKeeper.TimeEntryManager.setActiveEntry(timeEntry);
   }
@@ -94,13 +98,9 @@ function TimeEntryManager() {
     active_entry = null;
   }
 
-
-  // TODO: These event listeners need improving.
-  // Not sure of what to do with them and how to make that smooth between tasks
-  // and the manager, so just ditching them here for the time being.
-  // NOTE: Placed here and not in main renderEntries() function, as that's
-  // called every time a new entry is added (or deleted), and will cause
-  // events to be binded more than once.
+  // NOTE: Event listeners placed here and not in main renderEntries() function,
+  // as that's called every time a new entry is added (or deleted), and will
+  // cause events to be bound more than once.
   (function addEventListeners() {
     document.addEventListener('timeEntryStopped', function(e) {
       var stoppedEntry = e.detail;

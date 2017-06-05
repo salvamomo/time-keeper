@@ -38,4 +38,6 @@ IDEAS:
   setActiveEntry() function (startTimer, updateTimeEntry...).
 
 - Responsibility in some logic between time entries and TimeEntryManager is a
-  bit blurry.
+  bit blurry. Improve the way eventListeners are used in these 2 elements:
+  (e.g: 'timeEntryStopped', 'timeEntryResumed', etc..).
+
