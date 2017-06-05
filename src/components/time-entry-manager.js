@@ -8,25 +8,21 @@ function TimeEntryManager() {
   var active_entry;
   var time_entries = [];
 
-  // TODO: Finish this, and decide where to place it and how to call it.
-  // Although IIFE doesn't look too bad.
-  (function getTimeEntriesFromDb() {
-    var timeEntryFromDb = null;
+  // Set up entries in the UI.
+  (function loadTimeEntriesFromDb() {
+    var dbEntryHolder = null;
 
-    // TODO: When preferences are implemented, or a widget to show more entries,
-    // Make this show only entries for the last week / month by default.
-    // CHECKME: All this should be probably an exposed "loadTimeEntries" method.
     timeKeeper.db.getAllTimeEntriesSortedByDate(function(timeEntries) {
       for (var i = 0; i < timeEntries.length; i++) {
-        // Any other better way of loading this as an actual TimeEntry object?
-        timeEntryFromDb = TimeEntry.createFromDBObject(timeEntries[i])
-        if (timeEntryFromDb) {
-          time_entries.push(timeEntryFromDb);
+
+        dbEntryHolder = TimeEntry.createFromDBObject(timeEntries[i]);
+        if (dbEntryHolder) {
+          time_entries.push(dbEntryHolder);
 
           // Worth having a separate control variable to track what's the actual
           // active entry, instead of relying on the time entry itself?
-          if (timeEntryFromDb.active) {
-            timeKeeper.TimeEntryManager.setActiveEntry(timeEntryFromDb);
+          if (dbEntryHolder.active) {
+            timeKeeper.TimeEntryManager.setActiveEntry(dbEntryHolder);
           }
         }
       }

@@ -24,4 +24,6 @@ IDEAS:
 - Edit widget should not update the time spent unless its value has been changed
   manually. Otherwise it could change the actual time spent (even if just by
   milliseconds).
-  
+
+- Implement preferences so that by default only entries from the last X days are
+  loaded when opening the app. (Include "show more..." button, etc).
