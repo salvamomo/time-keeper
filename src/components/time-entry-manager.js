@@ -75,8 +75,6 @@ function TimeEntryManager() {
   }
 
   function getTotalTimeForEntryGroup(groupDateString) {
-    // TODO: Statically cache this? Don't want to update every time, but might
-    // need to be that way to tackle all scenarios.
     var totalTimeByDate = 0;
 
     time_entries.forEach(function(timeEntry, index, timeEntries) {
@@ -165,7 +163,7 @@ function TimeEntryManager() {
           renderTimeEntries();
         }
         else {
-          alert("TODO: Better handling for when a time entry can't be deleted");
+          alert("Oops. There was an error deleting this time entry. Please try again.");
         }
       });
     });
