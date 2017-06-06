@@ -33,6 +33,14 @@ function TimeEntryManager() {
     });
   })();
 
+  /**
+   * Given a description text, creates a new time entry and adds it to the db.
+   *
+   * The new task will be set as the active one.
+   *
+   * @param description
+   *  The description for the new task.
+   */
   function addTimeEntry(description) {
     var timeEntry = new TimeEntry(description);
 
@@ -57,30 +65,61 @@ function TimeEntryManager() {
     timeKeeper.TimeEntryManager.setActiveEntry(timeEntry);
   }
 
+  /**
+   * Resumes the given timeEntry, setting it as the active one.
+   *
+   * @param resumedTimeEntry
+   *  The entry for which to resume work.
+   */
   function resumeTimeEntry(resumedTimeEntry) {
     resumedTimeEntry.startTimer();
     timeKeeper.TimeEntryManager.setActiveEntry(resumedTimeEntry);
     timeKeeper.db.updateTimeEntry(resumedTimeEntry);
   }
 
-  // CHECKME: would removeTimeEntry() be a better name?
+  /**
+   * Deletes a given timeEntry permanently from the database.
+   *
+   * @param timeEntry
+   *  The time entry to remove from the system.
+   */
   function deleteTimeEntry(timeEntry) {
     for(var index in time_entries) {
-      if (time_entries[index].time_entry_id == timeEntry.time_entry_id) {
+      if (time_entries[index].time_entry_id === timeEntry.time_entry_id) {
         time_entries.splice(index, 1);
         break;
       }
     }
   }
 
+  /**
+   * Returns the time entries loaded by the TimeEntryManager.
+   *
+   * @return {Array}
+   *  An array of TimeEntry objects.
+   */
   function getTimeEntries() {
     return time_entries;
   }
 
+  /**
+   * Returns the currently active entry.
+   * @return
+   *  The active_entry value (null, or an instance of TimeEntry).
+   */
   function getActiveEntry() {
     return active_entry;
   }
 
+  /**
+   * Calculates and returns the total time for a group of entries (date group).
+   *
+   * @param groupDateString
+   *  The string of the date for which to calculate the total time.
+   *
+   * @return
+   *  The formatted time for the date group.
+   */
   function getTotalTimeForEntryGroup(groupDateString) {
     var totalTimeByDate = 0;
 
@@ -92,11 +131,19 @@ function TimeEntryManager() {
     return formatTimeAsHoursAndMinutes(totalTimeByDate);
   }
 
+  /**
+   * Sets the active_entry.
+   *
+   * @param timeEntry
+   *  The timeEntry to set as the active one in the manager.
+   */
   function setActiveEntry(timeEntry) {
-    // CHECKME: Need further checks here?
     active_entry = timeEntry;
   }
 
+  /**
+   * Unsets the current active_entry, leaving it to null.
+   */
   function unsetActiveEntry() {
     active_entry = null;
   }
@@ -104,6 +151,10 @@ function TimeEntryManager() {
   // NOTE: Event listeners placed here and not in main renderEntries() function,
   // as that's called every time a new entry is added (or deleted), and will
   // cause events to be bound more than once.
+
+  /**
+   * Sets up the event listeners to respond to events from individual entries.
+   */
   (function addEventListeners() {
     document.addEventListener('timeEntryStopped', function(e) {
       var stoppedEntry = e.detail;
@@ -172,7 +223,7 @@ function TimeEntryManager() {
     });
   })();
 
-
+  // exposed API of the TimeEntryManager module.
   var publicAPI = {
     addTimeEntry: addTimeEntry,
     getTimeEntries: getTimeEntries,
