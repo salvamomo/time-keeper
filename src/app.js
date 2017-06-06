@@ -23,8 +23,9 @@ function init() {
   timeKeeper.db.init(function() {
     // Add widget to create a new time entry.
     addTimeEntryFormWidget();
-    // Add region for time entries. (Time entries manager).
+    // Add region for time entries and render them. (Time entries manager).
     addTimeEntriesRegion();
+    renderTimeEntries();
     // Add bindings.
     addBindings();
 
@@ -34,6 +35,9 @@ function init() {
   });
 }
 
+/**
+ * Renders the form to use when adding new time entries.
+ */
 function addTimeEntryFormWidget() {
   var widgetMarkup = "<div id='new-time-entry-wrapper'>" +
     "<div class='time-entry-form'>" +
@@ -44,12 +48,17 @@ function addTimeEntryFormWidget() {
   document.getElementById('top-widgets').innerHTML += '<div class="widget">' + widgetMarkup + '</div>';
 }
 
+/**
+ * Renders the region where time entries will be included.
+ */
 function addTimeEntriesRegion() {
   var regionWrapper = '<div class="widget"><div id="time-entries-wrapper"></div></div>';
   document.getElementById('middle-widgets').innerHTML += regionWrapper;
-  renderTimeEntries();
 }
 
+/**
+ * Renders existing time entries in the time entries region.
+ */
 function renderTimeEntries() {
   var timeEntries = (timeKeeper.TimeEntryManager != undefined) ? timeKeeper.TimeEntryManager.getTimeEntries() : [];
   var currentEntryGroupInterval = false;
@@ -102,7 +111,16 @@ function renderTimeEntries() {
             var currentDayEntryGroupId = timeEntry.date.toDateString();
               currentEntryGroupInterval = setInterval(function() {
                 var groupTotalTime = timeKeeper.TimeEntryManager.getTotalTimeForEntryGroup(currentDayEntryGroupId);
-              document.getElementById(currentDayEntryGroupId).getElementsByClassName('time-entry-group-total-spent').item(0).innerHTML = groupTotalTime;
+                var currentDayGroupElement = document.getElementById(currentDayEntryGroupId);
+
+                // In case there was just one entry, and it was deleted, clear
+                // the interval for the current day header update.
+                if (currentDayGroupElement === null) {
+                  clearInterval(currentEntryGroupInterval);
+                  currentEntryGroupInterval = false;
+                  return;
+                }
+                document.getElementById(currentDayEntryGroupId).getElementsByClassName('time-entry-group-total-spent').item(0).innerHTML = groupTotalTime;
             }, 1000);
           }
 
@@ -118,6 +136,9 @@ function renderTimeEntries() {
   }
 }
 
+/**
+ * Attaches bindings to the addTimeEntryForm widget.
+ */
 function addBindings() {
   var submitButton = document.getElementById('new-time-entry-submit');
   submitButton.addEventListener('click', function() {
