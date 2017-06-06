@@ -88,7 +88,7 @@ function renderTimeEntries() {
         // First item of a given group. Render group heading and remove it from
         // groups array.
         if (totalTimesByDate[timeEntry.date.toDateString()].rendered == undefined) {
-          var totalTimeFormatted = formatTimeAsHoursAndMinuted(totalTimesByDate[timeEntry.date.toDateString()].total_time);
+          var totalTimeFormatted = formatTimeAsHoursAndMinutes(totalTimesByDate[timeEntry.date.toDateString()].total_time);
           var formattedGroupDate = weekDays[timeEntry.date.getDay()] + ', ' + padTimeComponentString(timeEntry.date.getDate()) + ' ' + monthNames[timeEntry.date.getMonth()];
 
           var groupNode = document.createElement('div');

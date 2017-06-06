@@ -4,6 +4,9 @@
 
 "use strict";
 
+/**
+ * Initialises the Time Entry Manager.
+ */
 function TimeEntryManager() {
   var active_entry;
   var time_entries = [];
@@ -86,7 +89,7 @@ function TimeEntryManager() {
         totalTimeByDate += timeEntry.total_time;
       }
     });
-    return formatTimeAsHoursAndMinuted(totalTimeByDate);
+    return formatTimeAsHoursAndMinutes(totalTimeByDate);
   }
 
   function setActiveEntry(timeEntry) {
