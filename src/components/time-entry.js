@@ -9,6 +9,15 @@
 // because it'll work for entity creation, but not on update, as the db logic
 // can't figure out what entry is being updated (since it can't enum time_entry
 // id as being provided.
+
+/**
+ * TimeEntry "Class" constructor.
+ *
+ * @param description
+ *  The description of the Time Entry.
+ *
+ * @constructor
+ */
 function TimeEntry(description) {
   // Declare time_entry_id, but set no value. It'll be populated when saving the
   // time entry into the database.
