@@ -5,7 +5,7 @@
 /**
  * Jira module.
  */
-function Jira(username, password) {
+function Jira(jira_url, username, password) {
 
   var b64AuthString = null;
   generateAuthenticationHeader(username, password);
@@ -25,7 +25,7 @@ function Jira(username, password) {
     };
 
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://bluespark.atlassian.net/rest/api/2/issue/' + issueId + '/worklog');
+    xhr.open('POST', jira_url + '/rest/api/2/issue/' + issueId + '/worklog');
     xhr.setRequestHeader('Authorization', 'Basic ' + b64AuthString);
     xhr.setRequestHeader('Content-Type', 'application/json');
 

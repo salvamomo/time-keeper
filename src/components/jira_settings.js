@@ -12,8 +12,10 @@ function init() {
   let saveButton = document.getElementById('jira_settings_save');
   saveButton.addEventListener('click', function () {
     // Get username and password and store them.
+    let url = document.getElementsByName('jira_url').item(0).value;
     let username = document.getElementsByName('jira_username').item(0).value;
     let password = document.getElementsByName('jira_password').item(0).value;
+    window.localStorage.setItem('jira_url', url);
     window.localStorage.setItem('jira_username', username);
     window.localStorage.setItem('jira_password', password);
 
