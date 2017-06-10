@@ -286,7 +286,8 @@ TimeEntry.prototype.renderEditable = function() {
             var newDateDay = dateInput.getElementsByClassName('date_day').item(0).value;
             var newDateMonth = dateInput.getElementsByClassName('date_month').item(0).value;
             var newDateYear = dateInput.getElementsByClassName('date_year').item(0).value;
-            var newDate = new Date(newDateYear, newDateMonth - 1, newDateDay);
+            var now = new Date();
+            var newDate = new Date(newDateYear, newDateMonth - 1, newDateDay, now.getHours(), now.getMinutes());
             that.setDate(newDate);
 
             // Grab new duration and store it.
@@ -478,15 +479,20 @@ TimeEntry.createFromDBObject = function(dbObject) {
 };
 
 /**
- * TODO: Complete. Work in progress. This should be plugin-based, and not part
- * of the time entry prototype.
+ * Logs the time spent in the task in the configured JIRA backend.
  */
 TimeEntry.prototype.logTimeInJira = function () {
   if (this.jira_ready_for_sync === true && this.jira_already_synced === false) {
     var secondsSpent = this.total_time;
-    // TODO: start time needs formatting. Hardcoded for now.
-    // var startTime = this.start_time;
-    var startTime = "2017-06-07T09:00:00.000+0000.";
+
+    // Format start dateTime of the worklog.
+    let day = padTimeComponentString(this.date.getDate());
+    let month = padTimeComponentString(this.date.getMonth() + 1);
+    let year = this.date.getFullYear();
+    let hours = padTimeComponentString(this.date.getHours());
+    let minutes = padTimeComponentString(this.date.getMinutes());
+    let seconds = padTimeComponentString(this.date.getSeconds());
+    var startTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ':' + seconds + '.000+0000.';
 
     var requestCallback = function(result) {
       if (result) {
