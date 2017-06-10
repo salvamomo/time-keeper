@@ -42,7 +42,26 @@ function TimeKeeperMenus() {
       }
     };
 
+    // Create and append the 1st level menu to the menubar
+    var jiraLink = {
+      type: 'normal',
+      label: 'Jira Integration',
+      click: function () {
+        appWindows.jiraWindow = nw.Window.open('src/jira.html', {
+          id: "jira",
+          height: 280,
+          width: 300,
+          focus: true,
+          fullscreen: false,
+          resizable: false
+        });
+      }
+    };
+
     menu.append(new nw.MenuItem(aboutLink));
+    menu.append(new nw.MenuItem({ type: 'separator' }));
+    menu.append(new nw.MenuItem(jiraLink));
+    menu.append(new nw.MenuItem({ type: 'separator' }));
     menu.append(new nw.MenuItem({
       type: 'normal',
       label: 'Quit',
@@ -62,6 +81,15 @@ function TimeKeeperMenus() {
     menuBar.items[0].submenu.removeAt(0);
     aboutLink.label = 'About Time Keeper';
     menuBar.items[0].submenu.insert(new nw.MenuItem(aboutLink));
+
+    var settingsMenu = new nw.Menu();
+    settingsMenu.append(new nw.MenuItem(jiraLink));
+
+    menuBar.append(new nw.MenuItem({
+      label: 'Settings',
+      submenu: settingsMenu
+    }));
+
 
     nw.Window.get().menu = menuBar;
     tray.menu = menu;

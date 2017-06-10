@@ -12,12 +12,17 @@ window.onload = init;
  * Main entry point for the application.
  */
 function init() {
+  process_args();
   const databaseName = 'timeKeeper';
 
   console.log("Initialising application");
   console.log("Starting local database.");
 
   timeKeeper.menus = TimeKeeperMenus();
+
+  let jira_u = window.localStorage.getItem('jira_username');
+  let jira_p = window.localStorage.getItem('jira_password');
+  timeKeeper.jira = Jira(jira_u, jira_p);
 
   timeKeeper.db = tkDatabase(databaseName);
   timeKeeper.db.init(function() {
@@ -32,6 +37,18 @@ function init() {
     // TimeEntryManager file loaded from index.html.
     timeKeeper.TimeEntryManager = TimeEntryManager();
     timeKeeper.menus.init(timeKeeper.windows);
+  });
+}
+
+/**
+ * Reads command-line arguments and triggers any necessary actions.
+ */
+function process_args() {
+  nw.App.argv.forEach(function(arg, index, args) {
+    if (arg === '--enable-devtools=1') {
+      console.log('Enabling devtools.');
+      nw.Window.get().showDevTools();
+    }
   });
 }
 
