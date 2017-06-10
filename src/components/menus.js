@@ -54,6 +54,14 @@ function TimeKeeperMenus() {
           focus: true,
           fullscreen: false,
           resizable: false
+        }, function(new_window) {
+          new_window.on('close', function() {
+            this.hide();
+            let jira_u = window.localStorage.getItem('jira_username');
+            let jira_p = window.localStorage.getItem('jira_password');
+            timeKeeper.jira = new Jira(jira_u, jira_p);
+            this.close(true);
+          });
         });
       }
     };
