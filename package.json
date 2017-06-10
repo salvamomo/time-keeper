@@ -10,7 +10,10 @@
   "window": {
     "width": 500,
     "min_width": 500,
-    "min_height": 400,
-    "toolbar": false
+    "min_height": 400
+  },
+  "scripts": {
+    "start": "nwjs ./ --enable-logging=stderr --enable-devtools=0",
+    "start-debug": "nwjs ./ --enable-logging=stderr --enable-devtools=1"
   }
 }
