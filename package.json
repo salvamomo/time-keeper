@@ -12,8 +12,14 @@
     "min_width": 500,
     "min_height": 400
   },
+  "platformOverrides": {
+    "osx64": {
+      "name": "Time Keeper"
+    }
+  },
   "scripts": {
     "start": "nwjs ./ --enable-logging=stderr --enable-devtools=0",
-    "start-debug": "nwjs ./ --enable-logging=stderr --enable-devtools=1"
+    "start-debug": "nwjs ./ --enable-logging=stderr --enable-devtools=1",
+    "build": "nwbuild --version=\"0.19.5\" --buildDir=\"./builds\" --platforms=\"osx64\" --macIcns=\"./assets/osx/app.icns\" --flavor=\"normal\" ./"
   }
 }
