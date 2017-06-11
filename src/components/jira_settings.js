@@ -20,8 +20,10 @@ function init() {
     window.localStorage.setItem('jira_username', username);
     window.localStorage.setItem('jira_password', password);
 
-    let success = document.createElement('span');
-    success.innerText = 'Credentials saved';
-    document.getElementById('jira-authentication').appendChild(success);
+    // Let main window know settings have been updated.
+    var settingsEvent = new CustomEvent('jiraSettingsSaved');
+    document.dispatchEvent(settingsEvent);
+
+    document.getElementsByClassName('jira_settings_result').item(0).innerHTML = 'Credentials saved';
   });
 }

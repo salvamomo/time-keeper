@@ -55,13 +55,15 @@ function TimeKeeperMenus() {
           fullscreen: false,
           resizable: false
         }, function(new_window) {
-          new_window.on('close', function() {
-            this.hide();
-            let jira_url = window.localStorage.getItem('jira_url');
-            let jira_u = window.localStorage.getItem('jira_username');
-            let jira_p = window.localStorage.getItem('jira_password');
-            timeKeeper.jira = new Jira(jira_url, jira_u, jira_p);
-            this.close(true);
+          new_window.on('loaded', function() {
+            var document = new_window.window.document;
+
+            document.addEventListener('jiraSettingsSaved', function(event) {
+              let jira_url = window.localStorage.getItem('jira_url');
+              let jira_u = window.localStorage.getItem('jira_username');
+              let jira_p = window.localStorage.getItem('jira_password');
+              timeKeeper.jira = new Jira(jira_url, jira_u, jira_p);
+            });
           });
         });
       }

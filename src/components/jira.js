@@ -32,9 +32,9 @@ function Jira(jira_url, username, password) {
     xhr.onreadystatechange = function () {
       let data;
       if (xhr.readyState !== XMLHttpRequest.DONE) {
-        console.log('Request not finished yet');
         return;
       }
+      console.log('REST request to Jira finished.');
 
       if (xhr.status === 201) {
         // data = xhr.responseText;
