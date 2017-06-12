@@ -1,11 +1,11 @@
 {
   "name": "time-keeper",
   "version": "1.0.0",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/salvamomo/time-keeper.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/salvamomo/time-keeper.git"
   },
-  "license" : "BSD-3-Clause",
+  "license": "BSD-3-Clause",
   "main": "src/index.html",
   "window": {
     "width": 500,
@@ -21,5 +21,11 @@
     "start": "nwjs ./ --enable-logging=stderr --enable-devtools=0",
     "start-debug": "nwjs ./ --enable-logging=stderr --enable-devtools=1",
     "build": "nwbuild --version=\"0.19.5\" --buildDir=\"./builds\" --platforms=\"osx64\" --macIcns=\"./assets/osx/app.icns\" --flavor=\"normal\" ./"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.0.4",
+    "jshint": "^2.9.4",
+    "jshint-stylish": "^2.2.1"
   }
 }
