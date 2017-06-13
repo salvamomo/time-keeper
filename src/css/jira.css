@@ -1,0 +1,19 @@
+body {
+  background: #f1f1f1;
+}
+
+/* Main app holder */
+.app {
+}
+
+button[type="submit"] {
+  border: none;
+  font-size: 13px;
+  height: 25px;
+  padding: 4px 6px 3px;
+  color: #ffffff;
+}
+button[data-ui-action="save"] {
+  background: #337ab7;
+  border: 1px solid #2e6da4;
+}

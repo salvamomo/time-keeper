@@ -53,6 +53,11 @@ function TimeEntry(description) {
 
   // Display state.
   this.displayMode = 'default';
+
+  // Extended attributes (This should be moved into other objects / plugins.
+  this.jira_already_synced = false;
+  this.jira_task_id = null;
+  this.jira_ready_for_sync = false;
 }
 
 /**
@@ -233,12 +238,21 @@ TimeEntry.prototype.renderEditable = function() {
   durationWidget += '<span>Minutes: </span><input type="number" name="duration_minutes" class="duration_input duration_minutes" min="0" max="59" value="' + totalTimeMinutes + '">';
   durationWidget += '<span>Seconds: </span><input type="number" name="duration_seconds" class="duration_input duration_seconds" min="0" max="59" value="' +totalTimeSeconds + '">';
 
+  var jiraWidget = '<pre>JIRA:</pre>';
+  jiraWidget += '<span>Task ID: </span><input type="text" name="jira_task_id" class="jira_input jira_task_id" value="' + this.jira_task_id + '">';
+  var readyForSyncValue = this.jira_ready_for_sync ? 'checked' : '';
+  jiraWidget += '<input type="checkbox" name="jira_ready_for_sync" class="jira_input jira_ready_for_sync" ' + readyForSyncValue + '>Ready for sync.<br>';
+  if (this.jira_already_synced) {
+    jiraWidget += '<input type="checkbox" name="jira_ready_for_sync" class="jira_input jira_ready_for_sync" disabled=true checked>Already synced.<br>';
+  }
+
   var editWidget = document.createElement('div');
   editWidget.className = 'time-entry-edit-form';
   editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '"><br>' +
-    '<input type="text" class="edit-time-entry-project" value="' +  projectString + '"</input>' +
+    '<input type="text" class="edit-time-entry-project" value="' +  projectString + '" placeholder="Project">' +
     '<div class="edit-time-entry-date"><pre>Date:</pre>' +  editDateWidget + '</div>' +
     '<div class="edit-time-entry-duration">' +  durationWidget + '</div>' +
+    '<div class="edit-time-entry-jira">' +  jiraWidget + '</div>' +
     '<div class="edit-time-entry-actions">' +
     '<button type="submit" data-ui-action="save">Save</button>' +
     '<button type="submit" data-ui-action="delete">Delete</button>' +
@@ -272,7 +286,8 @@ TimeEntry.prototype.renderEditable = function() {
             var newDateDay = dateInput.getElementsByClassName('date_day').item(0).value;
             var newDateMonth = dateInput.getElementsByClassName('date_month').item(0).value;
             var newDateYear = dateInput.getElementsByClassName('date_year').item(0).value;
-            var newDate = new Date(newDateYear, newDateMonth - 1, newDateDay);
+            var now = new Date();
+            var newDate = new Date(newDateYear, newDateMonth - 1, newDateDay, now.getHours(), now.getMinutes());
             that.setDate(newDate);
 
             // Grab new duration and store it.
@@ -282,6 +297,12 @@ TimeEntry.prototype.renderEditable = function() {
             var newDurationSeconds = durationInput.getElementsByClassName('duration_seconds').item(0).value;
             var newDuration = Number((newDurationHours * 3600)) + Number((newDurationMinutes * 60)) + Number(newDurationSeconds);
             that.setDuration(newDuration);
+
+            // Grab jira details and store them.
+            var jiraInput = that.renderedNode.getElementsByClassName('edit-time-entry-jira').item(0);
+            that.jira_task_id = jiraInput.getElementsByClassName('jira_task_id').item(0).value;
+            that.jira_ready_for_sync = jiraInput.getElementsByClassName('jira_ready_for_sync').item(0).checked;
+            that.logTimeInJira();
 
             clearInterval(that.editFormUpdateIntervalId);
             that.render();
@@ -455,4 +476,33 @@ TimeEntry.createFromDBObject = function(dbObject) {
     }
   });
   return newTimeEntry;
+};
+
+/**
+ * Logs the time spent in the task in the configured JIRA backend.
+ */
+TimeEntry.prototype.logTimeInJira = function () {
+  if (this.jira_ready_for_sync === true && this.jira_already_synced === false) {
+    var secondsSpent = this.total_time;
+
+    // Format start dateTime of the worklog.
+    let day = padTimeComponentString(this.date.getDate());
+    let month = padTimeComponentString(this.date.getMonth() + 1);
+    let year = this.date.getFullYear();
+    let hours = padTimeComponentString(this.date.getHours());
+    let minutes = padTimeComponentString(this.date.getMinutes());
+    let seconds = padTimeComponentString(this.date.getSeconds());
+    var startTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ':' + seconds + '.000+0000.';
+
+    var requestCallback = function(result) {
+      if (result) {
+        this.jira_already_synced = true;
+        return;
+      }
+      alert('Oops. There was an error logging the time in JIRA. Please try again.');
+    };
+
+    // Log the time.
+    timeKeeper.jira.addWorklog(this.jira_task_id, this.description, startTime, secondsSpent, requestCallback.bind(this));
+  }
 };
