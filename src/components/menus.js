@@ -15,8 +15,11 @@ function TimeKeeperMenus() {
   function createMenus(appWindows) {
     // Create a tray icon and give it a menu.
     // http://stackoverflow.com/questions/12714923/os-x-icons-size/24702329#24702329
+
+    var os = require('os');
+    var win = nw.Window.get();
     var tray = new nw.Tray({ icon: 'assets/img/tray-icon.png' });
-    var menu = new nw.Menu({type: 'menubar'});
+    var menu = new nw.Menu();
 
     var aboutLink = {
       type: 'normal',
@@ -81,17 +84,20 @@ function TimeKeeperMenus() {
         nw.App.quit();
       }
     }));
+    tray.menu = menu;
 
     var menuBar = new nw.Menu({type: 'menubar'});
-    menuBar.createMacBuiltin("Time Keeper", {
-      hideEdit: true,
-      hideWindow: true
-    });
 
-    // Remove OSX's default 'about...' link and insert our custom one.
-    menuBar.items[0].submenu.removeAt(0);
-    aboutLink.label = 'About Time Keeper';
-    menuBar.items[0].submenu.insert(new nw.MenuItem(aboutLink));
+    if (os.platform() === "darwin") {
+      menuBar.createMacBuiltin("Time Keeper", {
+        hideEdit: true,
+        hideWindow: true
+      });
+      // Remove OSX's default 'about...' link and insert our custom one.
+      menuBar.items[0].submenu.removeAt(0);
+      aboutLink.label = 'About Time Keeper';
+      menuBar.items[0].submenu.insert(new nw.MenuItem(aboutLink));
+    }
 
     var settingsMenu = new nw.Menu();
     settingsMenu.append(new nw.MenuItem(jiraLink));
@@ -102,8 +108,21 @@ function TimeKeeperMenus() {
     }));
 
 
-    nw.Window.get().menu = menuBar;
-    tray.menu = menu;
+    if (os.platform() !== "darwin") {
+      let helpMenu = new nw.Menu();
+
+      aboutLink.label = 'About Time Keeper';
+      helpMenu.append(new nw.MenuItem(aboutLink));
+      menuBar.append(new nw.MenuItem({
+        label: 'Help',
+        submenu: helpMenu
+      }));
+    }
+
+    // Make sure menu is assigned at the very end, or else items added after
+    // assigning it to win.menu, might not appear in all systems (e.g: it's fine
+    // on OSX, but not Ubuntu).
+    win.menu = menuBar;
   }
 
   var publicAPI = {
