@@ -22,12 +22,12 @@
   },
   "scripts": {
     "start": "nwjs ./ --enable-logging=stderr --enable-devtools=0",
-    "start-debug": "nwjs ./ --enable-logging=stderr --enable-devtools=1",
-    "build": "nwbuild --version=\"0.19.5\" --buildDir=\"./builds\" --platforms=\"osx64\",\"linux64\" --macIcns=\"./assets/osx/app.icns\" --flavor=\"normal\" ./"
+    "start-debug": "nwjs ./ --enable-logging=stderr --enable-devtools=1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-jshint": "^2.0.4",
+    "gulp-replace": "^0.5.4",
     "jshint": "^2.9.4",
     "jshint-stylish": "^2.2.1"
   }
