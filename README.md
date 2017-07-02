@@ -38,6 +38,7 @@ https://github.com/salvamomo/time-keeper/issues
 
 License
 -------
+
 This project is released under BSD license.
 
 Author
@@ -45,7 +46,8 @@ Author
 
 Salva Molina (salvamomo) - @Salva_bg.
 
-Extra
------
-Please, behold the immense beauty of a giant crab attacking a city in the picture below:
-![Giant Crab](http://roberthood.net/blog/wp-content/uploads/2008/05/_incredible_giant_crab_redux_by_vegasmike.jpg)
+Credits
+-------
+
+Kudos to Code Enigma for allowing me to get started on NW.js and this project
+back in 2016.
