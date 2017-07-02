@@ -90,7 +90,7 @@ function TimeKeeperMenus() {
 
     if (os.platform() === "darwin") {
       menuBar.createMacBuiltin("Time Keeper", {
-        hideEdit: true,
+        hideEdit: false,
         hideWindow: true
       });
       // Remove OSX's default 'about...' link and insert our custom one.
