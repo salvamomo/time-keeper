@@ -39,6 +39,29 @@ function init() {
     timeKeeper.TimeEntryManager = TimeEntryManager();
     timeKeeper.menus.init(timeKeeper.windows);
   });
+
+  check_app_updates();
+}
+
+/**
+ * Checks if there are any available updates for the app.
+ */
+function check_app_updates() {
+  var installed_version = nw.App.manifest.version;
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://raw.githubusercontent.com/salvamomo/time-keeper/master/package.json');
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      let data = JSON.parse(xhr.responseText);
+      if (data.version > installed_version) {
+        alert('There is a new version of Time Keeper available.    ' +
+          'Head over to the releases page to download it.');
+      }
+    }
+  };
+  xhr.send(null);
 }
 
 /**
