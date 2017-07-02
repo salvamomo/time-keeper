@@ -158,12 +158,27 @@ function renderTimeEntries() {
  * Attaches bindings to the addTimeEntryForm widget.
  */
 function addBindings() {
+  var newTimeEntryTextField = document.getElementById('new-time-entry-description');
+
+  // Add entry when clicking 'Start'.
   var submitButton = document.getElementById('new-time-entry-submit');
   submitButton.addEventListener('click', function() {
-    var newTimeEntryDescription = document.getElementById('new-time-entry-description').value;
+    var newTimeEntryDescription = newTimeEntryTextField.value;
     if (newTimeEntryDescription) {
-      document.getElementById('new-time-entry-description').value = '';
+      newTimeEntryTextField.value = '';
       timeKeeper.TimeEntryManager.addTimeEntry(newTimeEntryDescription);
+    }
+  });
+
+  // Add entry when pressing enter.
+  newTimeEntryTextField.addEventListener('keyup', function(event) {
+    if (event.keyCode === 13) {
+      var newTimeEntryDescription = newTimeEntryTextField.value;
+      if (newTimeEntryDescription) {
+        newTimeEntryTextField.value = '';
+        timeKeeper.TimeEntryManager.addTimeEntry(newTimeEntryDescription);
+      }
+      newTimeEntryTextField.blur();
     }
   });
 }
