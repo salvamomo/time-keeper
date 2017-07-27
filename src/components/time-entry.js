@@ -84,21 +84,11 @@ TimeEntry.prototype.setDescription = function(description) {
 /**
  * Sets the Long description of the task.
  *
- * @param description
- *  The description of the Time Entry.
+ * @param longDescription
+ *  The long description of the Time Entry.
  */
 TimeEntry.prototype.setLongDescription = function(longDescription) {
   this.longDescription = longDescription;
-};
-
-/**
- * Sets the description of the task.
- *
- * @param description
- *  The description of the Time Entry.
- */
-TimeEntry.prototype.setDescription = function(description) {
-  this.description = description;
 };
 
 /**
