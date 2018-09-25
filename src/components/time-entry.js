@@ -58,6 +58,7 @@ function TimeEntry(description) {
   this.jira_already_synced = false;
   this.jira_task_id = null;
   this.jira_ready_for_sync = false;
+  timeKeeper.pluginManager.invokeTimeEntryInit(this);
 }
 
 /**
@@ -246,18 +247,24 @@ TimeEntry.prototype.renderEditable = function() {
     jiraWidget += '<input type="checkbox" name="jira_ready_for_sync" class="jira_input jira_ready_for_sync" disabled=true checked>Already synced.<br>';
   }
 
+  var jiraPluginAdditions = '<div class="edit-time-entry-jira">' +  jiraWidget + '</div>';
+  var widgetAdditions = timeKeeper.pluginManager.invokeRenderTimeEntryEditable(this);
+  // for (let i = 0; i < widgetAdditions.length; i++) {}
+
   var editWidget = document.createElement('div');
   editWidget.className = 'time-entry-edit-form';
   editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '"><br>' +
     '<input type="text" class="edit-time-entry-project" value="' +  projectString + '" placeholder="Project">' +
     '<div class="edit-time-entry-date"><pre>Date:</pre>' +  editDateWidget + '</div>' +
     '<div class="edit-time-entry-duration">' +  durationWidget + '</div>' +
-    '<div class="edit-time-entry-jira">' +  jiraWidget + '</div>' +
+    jiraPluginAdditions +
+    widgetAdditions +
     '<div class="edit-time-entry-actions">' +
     '<button type="submit" data-ui-action="save">Save</button>' +
     '<button type="submit" data-ui-action="delete">Delete</button>' +
     '<button type="submit" data-ui-action="cancel">Cancel</button>' +
     '</div>';
+
 
   // CHECKME: attachBindings. => detachBindings required? DOM API doesn't seem
   // to have a clear way of getting eventListeners attached an element, so it'd
@@ -303,6 +310,8 @@ TimeEntry.prototype.renderEditable = function() {
             that.jira_task_id = jiraInput.getElementsByClassName('jira_task_id').item(0).value;
             that.jira_ready_for_sync = jiraInput.getElementsByClassName('jira_ready_for_sync').item(0).checked;
             that.logTimeInJira();
+
+            timeKeeper.pluginManager.invokeTimeEntrySaved(that);
 
             clearInterval(that.editFormUpdateIntervalId);
             that.render();

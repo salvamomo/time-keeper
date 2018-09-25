@@ -31,3 +31,8 @@ function formatTimeAsHoursAndMinutes(seconds) {
   var formattedTime = Math.floor(seconds / (60 * 60)) + ' h ' + padTimeComponentString(Math.floor((seconds % (60 * 60)) / 60)) + ' min';
   return formattedTime;
 }
+
+module.exports = {
+  padTimeComponentString: padTimeComponentString,
+  formatTimeAsHoursAndMinutes: formatTimeAsHoursAndMinutes,
+};

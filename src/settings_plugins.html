@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Time Keeper</title>
+    <link rel="stylesheet" href="css/base.css">
+    <script type="text/javascript" src="components/settings_plugins.js"></script>
+</head>
+<body>
+<div class="app window-settings-plugins">
+    <section id="settings-plugins">
+        <h2>Select Plugins to enable</h2>
+        <span>Jira</span><input type="checkbox" name="plugin_jira" value="jira"><br>
+        <span>Custom Endpoint</span><input type="checkbox" name="plugin_custom_endpoint" value="custom_endpoint"><br>
+        <div class="settings_plugins_actions">
+            <button type="submit" data-ui-action="save" id="settings_plugins_save">Save</button>
+        </div>
+        <div class="settings_plugins_result">
+        </div>
+    </section>
+    <footer>
+    </footer>
+</div>
+</body>
+</html>

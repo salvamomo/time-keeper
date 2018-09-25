@@ -1,12 +1,19 @@
 /**
  * Main application js file.
  */
+var pluginManager = require('./plugin_manager');
 
 // When window is ready, initialise app.
-var timeKeeper = timeKeeper || { settings: {}};
+var timeKeeper = timeKeeper || { settings: {}, plugins: {}, enabled_plugins: {}};
 timeKeeper.windows = {};
+timeKeeper.pluginManager = pluginManager.init(timeKeeper);
 
 window.onload = init;
+
+// function addPlugin(plugin) {
+//   // let pluginInfo = plugin.info;
+//   timeKeeper.plugins[plugin.info.name] = plugin;
+// }
 
 /**
  * Main entry point for the application.
@@ -18,6 +25,7 @@ function init() {
   console.log("Initialising application");
   console.log("Starting local database.");
 
+  timeKeeper.pluginManager.loadPlugins();
   timeKeeper.menus = TimeKeeperMenus();
 
   let jira_url = window.localStorage.getItem('jira_url');
@@ -205,3 +213,7 @@ function addBindings() {
     }
   });
 }
+
+// module.exports = {
+//   timeKeeper: timeKeeper,
+// };

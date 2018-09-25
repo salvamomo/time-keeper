@@ -72,6 +72,31 @@ function TimeKeeperMenus() {
       }
     };
 
+    var pluginsLink = {
+      type: 'normal',
+      label: 'Plugins',
+      click: function () {
+        appWindows.pluginsWindow = nw.Window.open('src/settings_plugins.html', {
+          id: "plugins",
+          height: 280,
+          width: 300,
+          focus: true,
+          fullscreen: false,
+          resizable: false
+        }, function(new_window) {
+          new_window.on('loaded', function() {
+            var document = new_window.window.document;
+
+            document.addEventListener('timeKeeperPluginSettingsSaved', function(event) {
+              // TODO: Could this ve done directly from the plugins component JS?
+              timeKeeper.enabled_plugins.jira = window.localStorage.getItem('config.enabled_plugins.jira');
+              timeKeeper.enabled_plugins.custom_endpoint = window.localStorage.getItem('config.enabled_plugins.custom_endpoint');
+            });
+          });
+        });
+      }
+    };
+
     menu.append(new nw.MenuItem(aboutLink));
     menu.append(new nw.MenuItem({ type: 'separator' }));
     menu.append(new nw.MenuItem(jiraLink));
@@ -100,7 +125,13 @@ function TimeKeeperMenus() {
     }
 
     var settingsMenu = new nw.Menu();
+    settingsMenu.append(new nw.MenuItem(pluginsLink));
     settingsMenu.append(new nw.MenuItem(jiraLink));
+
+    var settingsMenuLinks = timeKeeper.pluginManager.invokeSettingsMenuLinks();
+    for (let i = 0; i < settingsMenuLinks.length; i++) {
+      settingsMenu.append(new nw.MenuItem(settingsMenuLinks[i]));
+    }
 
     menuBar.append(new nw.MenuItem({
       label: 'Settings',
