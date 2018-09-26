@@ -18,13 +18,13 @@ function CustomEndpoint(ce_url, username, password) {
     b64AuthString = btoa(authString);
   }
 
-  function logTimeEntry(issueId, title, startTime, timeSpentSeconds, project, callback) {
+  function logTimeEntry(issueId, title, description, startTime, timeSpentSeconds, project, callback) {
     // Prepare request data.
 
     // title, description, date, totalTime, created, project, task.
     var worklog = {
       "title": title,
-      "description": title,
+      "description": description,
       "date": startTime,
       "totalTime": timeSpentSeconds,
       "created": startTime,
@@ -114,6 +114,7 @@ function CustomEndpointPlugin(App) {
       App.customEndpoint.logTimeEntry(
         timeEntry.ce_task_id,
         timeEntry.description,
+        timeEntry.longDescription,
         startTime,
         secondsSpent,
         timeEntry.project,

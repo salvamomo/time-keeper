@@ -24,7 +24,7 @@ function TimeEntry(description) {
   this.time_entry_id;
 
   this.description = description;
-  this.longDescription = null;
+  this.longDescription = '';
   this.project = null;
   this.date = new Date();
   this.active = false;
@@ -252,7 +252,7 @@ TimeEntry.prototype.renderEditable = function() {
   var editWidget = document.createElement('div');
   editWidget.className = 'time-entry-edit-form';
   editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '"><br>' +
-    '<textarea class="edit-time-entry-long-description" rows="5" cols="53" placeholder="Long description">' +  this.longDescription + '"</textarea>' +
+    '<textarea class="edit-time-entry-long-description" rows="5" cols="74" placeholder="Long description">' +  this.longDescription + '</textarea>' +
     '<input type="text" class="edit-time-entry-project" value="' +  projectString + '" placeholder="Project">' +
     '<div class="edit-time-entry-date"><pre>Date:</pre>' +  editDateWidget + '</div>' +
     '<div class="edit-time-entry-duration">' +  durationWidget + '</div>' +
