@@ -2,18 +2,20 @@ function pluginManager(App) {
   this.App = App;
 
   function loadPlugins() {
-    App.enabled_plugins.jira = window.localStorage.getItem('config.enabled_plugins.jira');
+    App.enabled_plugins.jira = window.localStorage.getItem('config.enabled_plugins.jira') == true;
     App.enabled_plugins.custom_endpoint = window.localStorage.getItem('config.enabled_plugins.custom_endpoint') == true;
 
-    if (App.enabled_plugins.custom_endpoint) {
-      let plugin = require('./plugins/custom_endpoint/custom_endpoint');
-      var loadedPlugin = plugin.load(App);
-      console.log('Plugin initialized: ' + loadedPlugin.info.name);
-      console.log('Plugin version: ' + loadedPlugin.info.version);
+    for (var pluginName in App.enabled_plugins) {
+      if (App.enabled_plugins[pluginName] === true) {
+        let plugin = require('./plugins/' + pluginName + '/' + pluginName);
+        var loadedPlugin = plugin.load(App);
+        console.log('Plugin initialized: ' + loadedPlugin.info.name);
+        console.log('Plugin version: ' + loadedPlugin.info.version);
 
-      App.plugins[loadedPlugin.info.name] = loadedPlugin;
-      App.plugins[loadedPlugin.info.name].hookInit();
-      // timeKeeper.addPlugin(loadedPlugin);
+        App.plugins[loadedPlugin.info.name] = loadedPlugin;
+        App.plugins[loadedPlugin.info.name].hookInit();
+        // timeKeeper.addPlugin(loadedPlugin);
+      }
     }
   }
 
@@ -22,6 +24,8 @@ function pluginManager(App) {
 
     for (var property in App.plugins) {
       if (App.plugins.hasOwnProperty(property)) {
+        // TODO: Need a registry of *hooks* implemented, before calling them
+        // blindly.
         let menuLink = App.plugins[property].hookSettingsMenuLink();
         menuLinks.push(menuLink);
       }

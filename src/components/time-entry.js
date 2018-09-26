@@ -54,10 +54,7 @@ function TimeEntry(description) {
   // Display state.
   this.displayMode = 'default';
 
-  // Extended attributes (This should be moved into other objects / plugins.
-  this.jira_already_synced = false;
-  this.jira_task_id = null;
-  this.jira_ready_for_sync = false;
+  // Extended attributes.
   timeKeeper.pluginManager.invokeTimeEntryInit(this);
 }
 
@@ -239,17 +236,7 @@ TimeEntry.prototype.renderEditable = function() {
   durationWidget += '<span>Minutes: </span><input type="number" name="duration_minutes" class="duration_input duration_minutes" min="0" max="59" value="' + totalTimeMinutes + '">';
   durationWidget += '<span>Seconds: </span><input type="number" name="duration_seconds" class="duration_input duration_seconds" min="0" max="59" value="' +totalTimeSeconds + '">';
 
-  var jiraWidget = '<pre>JIRA:</pre>';
-  jiraWidget += '<span>Task ID: </span><input type="text" name="jira_task_id" class="jira_input jira_task_id" value="' + this.jira_task_id + '">';
-  var readyForSyncValue = this.jira_ready_for_sync ? 'checked' : '';
-  jiraWidget += '<input type="checkbox" name="jira_ready_for_sync" class="jira_input jira_ready_for_sync" ' + readyForSyncValue + '>Ready for sync.<br>';
-  if (this.jira_already_synced) {
-    jiraWidget += '<input type="checkbox" name="jira_ready_for_sync" class="jira_input jira_ready_for_sync" disabled=true checked>Already synced.<br>';
-  }
-
-  var jiraPluginAdditions = '<div class="edit-time-entry-jira">' +  jiraWidget + '</div>';
   var widgetAdditions = timeKeeper.pluginManager.invokeRenderTimeEntryEditable(this);
-  // for (let i = 0; i < widgetAdditions.length; i++) {}
 
   var editWidget = document.createElement('div');
   editWidget.className = 'time-entry-edit-form';
@@ -257,14 +244,12 @@ TimeEntry.prototype.renderEditable = function() {
     '<input type="text" class="edit-time-entry-project" value="' +  projectString + '" placeholder="Project">' +
     '<div class="edit-time-entry-date"><pre>Date:</pre>' +  editDateWidget + '</div>' +
     '<div class="edit-time-entry-duration">' +  durationWidget + '</div>' +
-    jiraPluginAdditions +
-    widgetAdditions +
+    widgetAdditions.join('') +
     '<div class="edit-time-entry-actions">' +
     '<button type="submit" data-ui-action="save">Save</button>' +
     '<button type="submit" data-ui-action="delete">Delete</button>' +
     '<button type="submit" data-ui-action="cancel">Cancel</button>' +
     '</div>';
-
 
   // CHECKME: attachBindings. => detachBindings required? DOM API doesn't seem
   // to have a clear way of getting eventListeners attached an element, so it'd
@@ -305,14 +290,7 @@ TimeEntry.prototype.renderEditable = function() {
             var newDuration = Number((newDurationHours * 3600)) + Number((newDurationMinutes * 60)) + Number(newDurationSeconds);
             that.setDuration(newDuration);
 
-            // Grab jira details and store them.
-            var jiraInput = that.renderedNode.getElementsByClassName('edit-time-entry-jira').item(0);
-            that.jira_task_id = jiraInput.getElementsByClassName('jira_task_id').item(0).value;
-            that.jira_ready_for_sync = jiraInput.getElementsByClassName('jira_ready_for_sync').item(0).checked;
-            that.logTimeInJira();
-
             timeKeeper.pluginManager.invokeTimeEntrySaved(that);
-
             clearInterval(that.editFormUpdateIntervalId);
             that.render();
             var updateEvent = new CustomEvent('timeEntryUpdated', { 'detail': that });
@@ -461,6 +439,14 @@ TimeEntry.prototype.formatTimeSpent = function() {
 };
 
 /**
+ * Triggers a save event so that the TimeEntryManager picks it up.
+ */
+TimeEntry.prototype.save = function() {
+  var updateEvent = new CustomEvent('timeEntryUpdated', { 'detail': this });
+  document.dispatchEvent(updateEvent);
+};
+
+/**
  * Creates a TimeEntry object with data returned from the Database.
  *
  * This emulates a public static "method".
@@ -485,33 +471,4 @@ TimeEntry.createFromDBObject = function(dbObject) {
     }
   });
   return newTimeEntry;
-};
-
-/**
- * Logs the time spent in the task in the configured JIRA backend.
- */
-TimeEntry.prototype.logTimeInJira = function () {
-  if (this.jira_ready_for_sync === true && this.jira_already_synced === false) {
-    var secondsSpent = this.total_time;
-
-    // Format start dateTime of the worklog.
-    let day = padTimeComponentString(this.date.getDate());
-    let month = padTimeComponentString(this.date.getMonth() + 1);
-    let year = this.date.getFullYear();
-    let hours = padTimeComponentString(this.date.getHours());
-    let minutes = padTimeComponentString(this.date.getMinutes());
-    let seconds = padTimeComponentString(this.date.getSeconds());
-    var startTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ':' + seconds + '.000+0000.';
-
-    var requestCallback = function(result) {
-      if (result) {
-        this.jira_already_synced = true;
-        return;
-      }
-      alert('Oops. There was an error logging the time in JIRA. Please try again.');
-    };
-
-    // Log the time.
-    timeKeeper.jira.addWorklog(this.jira_task_id, this.description, startTime, secondsSpent, requestCallback.bind(this));
-  }
 };

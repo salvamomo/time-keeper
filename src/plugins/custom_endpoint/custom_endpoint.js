@@ -103,6 +103,8 @@ function CustomEndpointPlugin(App) {
       var requestCallback = function(result) {
         if (result) {
           timeEntry.ce_already_synced = true;
+          // This should probably require the TimeEntryManager directly.
+          timeEntry.save();
           return;
         }
         alert('Oops. There was an error logging the time in the Custom Endpoint. Please try again.');
@@ -170,6 +172,7 @@ function CustomEndpointPlugin(App) {
     widget += '<span>Task ID: </span><input type="text" name="ce_task_id" class="ce_input ce_task_id" value="' + timeEntry.ce_task_id + '">';
     var readyForSyncValue = timeEntry.ce_ready_for_sync ? 'checked' : '';
     widget += '<input type="checkbox" name="ce_ready_for_sync" class="ce_input ce_ready_for_sync" ' + readyForSyncValue + '>Ready for sync.<br>';
+
     if (timeEntry.ce_already_synced) {
       widget += '<input type="checkbox" name="ce_ready_for_sync" class="ce_input ce_ready_for_sync" disabled=true checked>Already synced.<br>';
     }

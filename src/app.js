@@ -28,11 +28,6 @@ function init() {
   timeKeeper.pluginManager.loadPlugins();
   timeKeeper.menus = TimeKeeperMenus();
 
-  let jira_url = window.localStorage.getItem('jira_url');
-  let jira_u = window.localStorage.getItem('jira_username');
-  let jira_p = window.localStorage.getItem('jira_password');
-  timeKeeper.jira = Jira(jira_url, jira_u, jira_p);
-
   timeKeeper.db = tkDatabase(databaseName);
   timeKeeper.db.init(function() {
     // Add widget to create a new time entry.

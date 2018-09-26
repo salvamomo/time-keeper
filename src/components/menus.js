@@ -45,33 +45,6 @@ function TimeKeeperMenus() {
       }
     };
 
-    // Create and append the 1st level menu to the menubar
-    var jiraLink = {
-      type: 'normal',
-      label: 'Jira Integration',
-      click: function () {
-        appWindows.jiraWindow = nw.Window.open('src/jira.html', {
-          id: "jira",
-          height: 280,
-          width: 300,
-          focus: true,
-          fullscreen: false,
-          resizable: false
-        }, function(new_window) {
-          new_window.on('loaded', function() {
-            var document = new_window.window.document;
-
-            document.addEventListener('jiraSettingsSaved', function(event) {
-              let jira_url = window.localStorage.getItem('jira_url');
-              let jira_u = window.localStorage.getItem('jira_username');
-              let jira_p = window.localStorage.getItem('jira_password');
-              timeKeeper.jira = new Jira(jira_url, jira_u, jira_p);
-            });
-          });
-        });
-      }
-    };
-
     var pluginsLink = {
       type: 'normal',
       label: 'Plugins',
@@ -99,8 +72,8 @@ function TimeKeeperMenus() {
 
     menu.append(new nw.MenuItem(aboutLink));
     menu.append(new nw.MenuItem({ type: 'separator' }));
-    menu.append(new nw.MenuItem(jiraLink));
-    menu.append(new nw.MenuItem({ type: 'separator' }));
+    // menu.append(new nw.MenuItem(jiraLink));
+    // menu.append(new nw.MenuItem({ type: 'separator' }));
     menu.append(new nw.MenuItem({
       type: 'normal',
       label: 'Quit',
@@ -126,7 +99,6 @@ function TimeKeeperMenus() {
 
     var settingsMenu = new nw.Menu();
     settingsMenu.append(new nw.MenuItem(pluginsLink));
-    settingsMenu.append(new nw.MenuItem(jiraLink));
 
     var settingsMenuLinks = timeKeeper.pluginManager.invokeSettingsMenuLinks();
     for (let i = 0; i < settingsMenuLinks.length; i++) {
