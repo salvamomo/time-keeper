@@ -62,6 +62,7 @@ function TimeKeeperMenus() {
 
             document.addEventListener('timeKeeperPluginSettingsSaved', function(event) {
               // TODO: Could this ve done directly from the plugins component JS?
+              // This should call the plugin manager and let it save the plugins enabled info.
               timeKeeper.enabled_plugins.jira = window.localStorage.getItem('config.enabled_plugins.jira');
               timeKeeper.enabled_plugins.custom_endpoint = window.localStorage.getItem('config.enabled_plugins.custom_endpoint');
             });
@@ -72,8 +73,13 @@ function TimeKeeperMenus() {
 
     menu.append(new nw.MenuItem(aboutLink));
     menu.append(new nw.MenuItem({ type: 'separator' }));
-    // menu.append(new nw.MenuItem(jiraLink));
-    // menu.append(new nw.MenuItem({ type: 'separator' }));
+
+    var pluginsSettingsLinks = timeKeeper.pluginManager.invokeSettingsMenuLinks();
+    for (let i = 0; i < pluginsSettingsLinks.length; i++) {
+      menu.append(new nw.MenuItem(pluginsSettingsLinks[i]));
+      menu.append(new nw.MenuItem({ type: 'separator' }));
+    }
+
     menu.append(new nw.MenuItem({
       type: 'normal',
       label: 'Quit',
@@ -100,9 +106,8 @@ function TimeKeeperMenus() {
     var settingsMenu = new nw.Menu();
     settingsMenu.append(new nw.MenuItem(pluginsLink));
 
-    var settingsMenuLinks = timeKeeper.pluginManager.invokeSettingsMenuLinks();
-    for (let i = 0; i < settingsMenuLinks.length; i++) {
-      settingsMenu.append(new nw.MenuItem(settingsMenuLinks[i]));
+    for (let i = 0; i < pluginsSettingsLinks.length; i++) {
+      settingsMenu.append(new nw.MenuItem(pluginsSettingsLinks[i]));
     }
 
     menuBar.append(new nw.MenuItem({
