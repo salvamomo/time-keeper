@@ -24,6 +24,7 @@ function TimeEntry(description) {
   this.time_entry_id;
 
   this.description = description;
+  this.longDescription = null;
   this.project = null;
   this.date = new Date();
   this.active = false;
@@ -76,6 +77,16 @@ TimeEntry.prototype.setTimeEntryId = function(timeEntryId) {
  */
 TimeEntry.prototype.setDescription = function(description) {
   this.description = description;
+};
+
+/**
+ * Sets the Long description of the task.
+ *
+ * @param longDescription
+ *  The long description of the Time Entry.
+ */
+TimeEntry.prototype.setLongDescription = function(longDescription) {
+  this.longDescription = longDescription;
 };
 
 /**
@@ -241,6 +252,7 @@ TimeEntry.prototype.renderEditable = function() {
   var editWidget = document.createElement('div');
   editWidget.className = 'time-entry-edit-form';
   editWidget.innerHTML = '<input type="text" class="edit-time-entry-description" value="' + this.description + '"><br>' +
+    '<textarea class="edit-time-entry-long-description" rows="5" cols="53" placeholder="Long description">' +  this.longDescription + '"</textarea>' +
     '<input type="text" class="edit-time-entry-project" value="' +  projectString + '" placeholder="Project">' +
     '<div class="edit-time-entry-date"><pre>Date:</pre>' +  editDateWidget + '</div>' +
     '<div class="edit-time-entry-duration">' +  durationWidget + '</div>' +
@@ -271,6 +283,7 @@ TimeEntry.prototype.renderEditable = function() {
             // CHECKME: Should the logic to hydrate the task object from the
             // form be placed in a another function?
             that.setDescription(that.renderedNode.getElementsByClassName('edit-time-entry-description').item(0).value);
+            that.setLongDescription(that.renderedNode.getElementsByClassName('edit-time-entry-long-description').item(0).value);
             that.setProject(that.renderedNode.getElementsByClassName('edit-time-entry-project').item(0).value);
 
             // Grab new date and store it.
