@@ -1,0 +1,10 @@
+{
+  "plugins": {
+    "jira": {
+      "Label": "Jira"
+    },
+    "custom_endpoint": {
+      "Label": "Custom Endpoint"
+    }
+  }
+}

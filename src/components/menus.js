@@ -58,14 +58,10 @@ function TimeKeeperMenus() {
           resizable: false
         }, function(new_window) {
           new_window.on('loaded', function() {
-            var document = new_window.window.document;
-
-            document.addEventListener('timeKeeperPluginSettingsSaved', function(event) {
-              // TODO: Could this ve done directly from the plugins component JS?
-              // This should call the plugin manager and let it save the plugins enabled info.
-              timeKeeper.enabled_plugins.jira = window.localStorage.getItem('config.enabled_plugins.jira');
-              timeKeeper.enabled_plugins.custom_endpoint = window.localStorage.getItem('config.enabled_plugins.custom_endpoint');
-            });
+            // Might want to remove menu entries when disabling plugins.
+            // Use document.addEventListener() for that.
+            // var document = new_window.window.document;
+            new_window.window.init(timeKeeper);
           });
         });
       }

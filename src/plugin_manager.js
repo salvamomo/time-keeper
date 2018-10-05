@@ -1,22 +1,64 @@
+var fs = require('fs');
+
 function pluginManager(App) {
   this.App = App;
 
-  function loadPlugins() {
-    App.enabled_plugins.jira = window.localStorage.getItem('config.enabled_plugins.jira') == true;
-    App.enabled_plugins.custom_endpoint = window.localStorage.getItem('config.enabled_plugins.custom_endpoint') == true;
+  function getAvailablePlugins() {
+    var availablePluginsFile = fs.readFileSync('plugins.json', 'utf8');
+    return JSON.parse(availablePluginsFile);
+  }
 
-    for (var pluginName in App.enabled_plugins) {
-      if (App.enabled_plugins[pluginName] === true) {
+  function getEnabledPlugins() {
+    if (fs.existsSync(nw.App.dataPath + '/' + 'enabled_plugins.json')) {
+      var enabledPluginsFile = fs.readFileSync(nw.App.dataPath + '/' + 'enabled_plugins.json', 'utf8');
+      var enabledPlugins = JSON.parse(enabledPluginsFile);
+      return enabledPlugins;
+    }
+    return {};
+  }
+
+  function loadPlugins() {
+    var availablePlugins = getAvailablePlugins();
+    App.enabled_plugins = getEnabledPlugins();
+
+    for (var pluginName in availablePlugins.plugins) {
+      if (App.enabled_plugins.hasOwnProperty(pluginName)) {
         let plugin = require('./plugins/' + pluginName + '/' + pluginName);
         var loadedPlugin = plugin.load(App);
         console.log('Plugin initialized: ' + loadedPlugin.info.name);
         console.log('Plugin version: ' + loadedPlugin.info.version);
-
+        // This info.name and other meta should be moved into a .json file.
         App.plugins[loadedPlugin.info.name] = loadedPlugin;
         App.plugins[loadedPlugin.info.name].hookInit();
         // timeKeeper.addPlugin(loadedPlugin);
       }
     }
+  }
+
+  /**
+   * @param enabledPlugins
+   */
+  function savePluginsConfig(enabledPlugins) {
+    var availablePlugins = getAvailablePlugins();
+
+    var config = {};
+    for (var pluginName in availablePlugins.plugins) {
+      if (enabledPlugins.hasOwnProperty(pluginName) && (enabledPlugins[pluginName] === true)) {
+        config[pluginName] = enabledPlugins[pluginName];
+
+        // Can probably get rid of this, and provide a isPluginEnabled() function.
+        App.enabled_plugins[pluginName] = true;
+      }
+    }
+    var configJSON = JSON.stringify(config);
+
+    fs.writeFile(nw.App.dataPath + '/' + 'enabled_plugins.json', configJSON, (err) => {
+      if (err) {
+        console.log('There was a problem saving the plugins config.');
+        throw err;
+      }
+      console.log('Plugins config saved.');
+    });
   }
 
   function invokeSettingsMenuLinks() {
@@ -68,6 +110,8 @@ function pluginManager(App) {
     invokeTimeEntryInit: invokeTimeEntryInit,
     invokeRenderTimeEntryEditable: invokeRenderTimeEntryEditable,
     invokeTimeEntrySaved: invokeTimeEntrySaved,
+    savePluginsConfig: savePluginsConfig,
+    getEnabledPlugins: getEnabledPlugins,
   }
 }
 
