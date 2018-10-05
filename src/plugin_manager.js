@@ -111,6 +111,7 @@ function pluginManager(App) {
     invokeRenderTimeEntryEditable: invokeRenderTimeEntryEditable,
     invokeTimeEntrySaved: invokeTimeEntrySaved,
     savePluginsConfig: savePluginsConfig,
+    getAvailablePlugins: getAvailablePlugins,
     getEnabledPlugins: getEnabledPlugins,
   }
 }
