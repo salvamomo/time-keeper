@@ -15,3 +15,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 - Credits and author info from the app footer.
+
+## [1.3.0] - 05-10-2018
+
+### Added
+
+- Created a plugin system to allow custom plugins be declared in a plugins.json file.
+- Added Agnostic endpoint plugin, where entries json can be sent arbitrarily (still a bit rigid though).
+- Moved all existing plugins (jira and custom_endpoint) into plugin directories and declare them in .json.
+- Introduced PluginManager to keep track of enabled plugins as app-data, in a .json file.
+- Updated node-webkit version to 0.33.3 and improved the way builds are triggered.

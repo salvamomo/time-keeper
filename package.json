@@ -1,7 +1,7 @@
 {
   "name": "time-keeper",
   "description": "A simple Time Tracker on its path to glory!",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/salvamomo/time-keeper.git"
@@ -22,7 +22,7 @@
     }
   },
   "scripts": {
-    "dist": "build --tasks mac-x64 --mirror https://dl.nwjs.io/ .",
+    "dist": "build --tasks mac-x64,linux-x86,linux-x64 --mirror https://dl.nwjs.io/ .",
     "start": "run --enable-logging=stderr --mirror https://dl.nwjs.io/ .",
     "dev": "nwjs ./ --user-data-dir='./data' --enable-logging=stderr",
     "dev-debug": "nwjs ./ --user-data-dir='./data' --enable-logging=stderr --enable-devtools=1"
