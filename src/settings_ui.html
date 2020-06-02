@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Time Keeper</title>
+    <link rel="stylesheet" href="css/base.css">
+    <script type="text/javascript" src="components/settings_ui.js"></script>
+</head>
+<body>
+<div class="app window-settings-ui">
+    <section id="settings-ui">
+        <h2>Select Plugins to enable</h2>
+        <div class="form">
+            <label for="settings_ui_project_list">List of Projects to show in Dropdown</label>
+            <textarea id="settings_ui_project_list" rows="5" cols="50"
+                placeholder="Enter one option per line. Leave empty to show the project field as a textfield instead of a list."></textarea>
+        </div>
+        <div class="settings_ui_actions">
+            <button type="submit" data-ui-action="save" id="settings_ui_save">Save</button>
+        </div>
+        <div class="settings_ui_result">
+        </div>
+    </section>
+    <footer>
+    </footer>
+</div>
+</body>
+</html>
