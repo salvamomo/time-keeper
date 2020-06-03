@@ -25,3 +25,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Moved all existing plugins (jira and custom_endpoint) into plugin directories and declare them in .json.
 - Introduced PluginManager to keep track of enabled plugins as app-data, in a .json file.
 - Updated node-webkit version to 0.33.3 and improved the way builds are triggered.
+
+## [1.4.0] - 03-06-2020
+
+### Added
+
+- New UI Settings window to allow defining a list of projects to show as a dropdown in the Time Entry widget.
+- Added nwjs package to simplify local development.
