@@ -45,6 +45,31 @@ function TimeKeeperMenus() {
       }
     };
 
+    var uiLink = {
+      type: 'normal',
+      label: 'UI',
+      click: function () {
+        appWindows.pluginsWindow = nw.Window.open('src/settings_ui.html', {
+          id: "ui",
+          height: 280,
+          width: 300,
+          focus: true,
+          fullscreen: false,
+          resizable: false
+        }, function(new_window) {
+          new_window.on('loaded', function() {
+            new_window.window.init(timeKeeper);
+
+            var document = new_window.window.document;
+            document.addEventListener('timeKeeperSettingsUiSaved', function(event) {
+              App.uiSettings = event.detail;
+            });
+
+          });
+        });
+      }
+    };
+
     var pluginsLink = {
       type: 'normal',
       label: 'Plugins',
@@ -101,6 +126,7 @@ function TimeKeeperMenus() {
 
     var settingsMenu = new nw.Menu();
     settingsMenu.append(new nw.MenuItem(pluginsLink));
+    settingsMenu.append(new nw.MenuItem(uiLink));
 
     for (let i = 0; i < pluginsSettingsLinks.length; i++) {
       settingsMenu.append(new nw.MenuItem(pluginsSettingsLinks[i]));
