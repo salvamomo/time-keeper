@@ -24,8 +24,8 @@
   "scripts": {
     "dist": "build --tasks mac-x64,linux-x86,linux-x64 --mirror https://dl.nwjs.io/ .",
     "start": "run --enable-logging=stderr --mirror https://dl.nwjs.io/ .",
-    "dev": "nwjs ./ --user-data-dir='./data' --enable-logging=stderr",
-    "dev-debug": "nwjs ./ --user-data-dir='./data' --enable-logging=stderr --enable-devtools=1"
+    "dev": "node_modules/.bin/nw ./ --user-data-dir='./data' --enable-logging=stderr",
+    "dev-debug": "node_modules/.bin/nw ./ --user-data-dir='./data' --enable-logging=stderr --enable-devtools=1"
   },
   "build": {
     "nwVersion": "0.33.3",
@@ -47,6 +47,7 @@
     "gulp-replace": "^0.5.4",
     "jshint": "^2.9.6",
     "jshint-stylish": "^2.2.1",
+    "nwjs": "^1.4.4",
     "nwjs-builder-phoenix": "^1.14.8"
   }
 }
