@@ -256,6 +256,14 @@ TimeEntry.prototype.renderEditable = function() {
     projectWidget = '<div><select class="edit-time-entry-project">';
     let projects = projectList.split("\n");
 
+    projectWidget += '<option value="unselected">-- Select an option --</option>';
+    if (projectString === '__none') {
+      projectWidget += '<option value="__none" selected="selected">-- No Project</option>';
+    }
+    else {
+      projectWidget += '<option value="__none">-- No Project</option>';
+    }
+
     for (var i = 0; i < projects.length; i++) {
       if (projects[i] === projectString) {
         projectWidget += '<option value="' + projects[i] + '" selected="selected">' + projects[i] + '</option>';
@@ -291,7 +299,7 @@ TimeEntry.prototype.renderEditable = function() {
   var currentChildElement = null;
   var widgetActionButtons = editWidget.getElementsByClassName('edit-time-entry-actions').item(0);
 
-  for (var i = 0; i < widgetActionButtons.childNodes.length; i++) {
+  for (i = 0; i < widgetActionButtons.childNodes.length; i++) {
     if (widgetActionButtons.childNodes.item(i).hasAttribute('data-ui-action')) {
       currentChildElement = widgetActionButtons.childNodes.item(i);
       switch (currentChildElement.getAttribute('data-ui-action')) {
@@ -302,10 +310,15 @@ TimeEntry.prototype.renderEditable = function() {
             that.setDescription(that.renderedNode.getElementsByClassName('edit-time-entry-description').item(0).value);
             that.setLongDescription(that.renderedNode.getElementsByClassName('edit-time-entry-long-description').item(0).value);
 
-
             if (projectList) {
               let projectDropdown = document.getElementsByClassName("edit-time-entry-project").item(0);
               let selectedProject = projectDropdown.options[projectDropdown.selectedIndex].value;
+
+              if (selectedProject === 'unselected') {
+                alert('You must select a project from the list.');
+                return;
+              }
+
               that.setProject(selectedProject);
             }
             else {
@@ -358,7 +371,7 @@ TimeEntry.prototype.renderEditable = function() {
   // tries to edit any of them. Otherwise, the real duration will overwrite the
   // entered value constantly, making the edit action unintuitive.
   var durationInputFields = editWidget.getElementsByClassName('duration_input');
-  for (var i = 0; i < durationInputFields.length; i++) {
+  for (i = 0; i < durationInputFields.length; i++) {
     // Use 'input' event instead of 'change', since 'change' doesn't pick up
     // values being entered with keyboard, just through actual clicks on the
     // top/down arrows.
