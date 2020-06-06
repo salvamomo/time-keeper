@@ -105,6 +105,11 @@ function CustomEndpointPlugin(App) {
           timeEntry.ce_already_synced = true;
           // This should probably require the TimeEntryManager directly.
           timeEntry.save();
+
+          // Force a re-render (@todo: This may be better in time entry manager,
+          // but checking the mode in which the render has to be done (widget or
+          // info header).
+          timeEntry.render();
           return;
         }
         alert('Oops. There was an error logging the time in the Custom Endpoint. Please try again.');
@@ -168,6 +173,12 @@ function CustomEndpointPlugin(App) {
     logTimeInEndpoint(timeEntry);
   }
 
+  function hookRenderTimeEntry(timeEntry) {
+    if (timeEntry.ce_already_synced) {
+      timeEntry.renderedNode.className += ' ce_entry_synchronized';
+    }
+  }
+
   function invokeRenderTimeEntryEditable(timeEntry) {
     var widget = '<pre>Custom Endpoint:</pre>';
     widget += '<span>Task ID: </span><input type="text" name="ce_task_id" class="ce_input ce_task_id" value="' + timeEntry.ce_task_id + '">';
@@ -187,6 +198,7 @@ function CustomEndpointPlugin(App) {
     hookSettingsMenuLink: hookSettingsMenuLink,
     invokeTimeEntryInit: invokeTimeEntryInit,
     invokeTimeEntrySaved: invokeTimeEntrySaved,
+    hookRenderTimeEntry: hookRenderTimeEntry,
     invokeRenderTimeEntryEditable: invokeRenderTimeEntryEditable,
   }
 }

@@ -76,6 +76,14 @@ function pluginManager(App) {
     return menuLinks;
   }
 
+  function invokeRenderTimeEntry(timeEntry) {
+    for (let pluginId in App.plugins) {
+      if (App.plugins[pluginId].hasOwnProperty('hookRenderTimeEntry')) {
+        App.plugins[pluginId].hookRenderTimeEntry(timeEntry);
+      }
+    }
+  }
+
   function invokeRenderTimeEntryEditable(timeEntry) {
     var widgetAdditions = [];
 
@@ -108,6 +116,7 @@ function pluginManager(App) {
     loadPlugins: loadPlugins,
     invokeSettingsMenuLinks: invokeSettingsMenuLinks,
     invokeTimeEntryInit: invokeTimeEntryInit,
+    invokeRenderTimeEntry: invokeRenderTimeEntry,
     invokeRenderTimeEntryEditable: invokeRenderTimeEntryEditable,
     invokeTimeEntrySaved: invokeTimeEntrySaved,
     savePluginsConfig: savePluginsConfig,

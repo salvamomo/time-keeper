@@ -1,0 +1,11 @@
+#time-entries-wrapper .time-entry-wrapper.ce_entry_synchronized {
+  background: rgba(229, 241, 229, 0.9);
+  background-image: url('../custom_endpoint/assets/plug-icon.png');
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: 10px 18px;
+}
+
+#time-entries-wrapper .time-entry-wrapper.ce_entry_synchronized .time-entry-info {
+  padding-left: 20px;
+}

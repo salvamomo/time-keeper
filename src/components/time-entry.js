@@ -205,6 +205,8 @@ TimeEntry.prototype.render = function() {
     '</div>' +
     '</div>';
 
+  timeKeeper.pluginManager.invokeRenderTimeEntry(this);
+
   // CHECKME: Make attachBindings a private method of this function?
   this.detachBindings();
   this.attachBindings(entryWrapper);
