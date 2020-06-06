@@ -32,3 +32,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - New UI Settings window to allow defining a list of projects to show as a dropdown in the Time Entry widget.
 - Added nwjs package to simplify local development.
+
+## [1.5.0] - 06-06-2020
+
+### Added
+
+- Make custom endpoint synchronized entries display plug icon and different background colour.
+- Bump nwjs version to 0.38.0
+- Extend plugins to let them insert their own CSS files in main app window
