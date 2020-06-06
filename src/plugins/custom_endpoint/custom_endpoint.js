@@ -85,6 +85,12 @@ function CustomEndpointPlugin(App) {
     return {name: 'custom_endpoint', version: '0.1'};
   }
 
+  function getStyleSheets() {
+    return [
+      'custom_endpoint.css'
+    ];
+  }
+
   function logTimeInEndpoint(timeEntry) {
     let notSynced = (timeEntry.ce_already_synced === false) || (timeEntry.ce_already_synced == null);
 
@@ -195,6 +201,7 @@ function CustomEndpointPlugin(App) {
   return {
     info: getInfo(),
     hookInit: hookInit,
+    getStyleSheets: getStyleSheets,
     hookSettingsMenuLink: hookSettingsMenuLink,
     invokeTimeEntryInit: invokeTimeEntryInit,
     invokeTimeEntrySaved: invokeTimeEntrySaved,

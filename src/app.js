@@ -6,6 +6,7 @@ var pluginManager = require('./plugin_manager');
 // When window is ready, initialise app.
 var timeKeeper = timeKeeper || { settings: {}, plugins: {}, enabled_plugins: {}};
 timeKeeper.windows = {};
+timeKeeper.mainWindow = window;
 timeKeeper.pluginManager = pluginManager.init(timeKeeper);
 
 window.onload = init;

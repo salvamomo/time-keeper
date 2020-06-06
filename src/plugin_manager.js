@@ -25,11 +25,26 @@ function pluginManager(App) {
       if (App.enabled_plugins.hasOwnProperty(pluginName)) {
         let plugin = require('./plugins/' + pluginName + '/' + pluginName);
         var loadedPlugin = plugin.load(App);
+
         console.log('Plugin initialized: ' + loadedPlugin.info.name);
         console.log('Plugin version: ' + loadedPlugin.info.version);
+
         // This info.name and other meta should be moved into a .json file.
         App.plugins[loadedPlugin.info.name] = loadedPlugin;
         App.plugins[loadedPlugin.info.name].hookInit();
+
+        if (loadedPlugin.hasOwnProperty('getStyleSheets')) {
+          let styleSheets = loadedPlugin.getStyleSheets();
+
+          styleSheets.forEach(function (path, index) {
+            let linkElement = document.createElement('link');
+            linkElement.rel = 'stylesheet';
+            linkElement.type = 'text/css';
+            linkElement.href = 'plugins/custom_endpoint/' + path;
+            App.mainWindow.document.head.appendChild(linkElement);
+          });
+        }
+
         // timeKeeper.addPlugin(loadedPlugin);
       }
     }
