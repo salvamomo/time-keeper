@@ -28,7 +28,7 @@
     "dev-debug": "node_modules/.bin/nw ./ --user-data-dir='./data' --enable-logging=stderr --enable-devtools=1"
   },
   "build": {
-    "nwVersion": "0.33.3",
+    "nwVersion": "0.38.0",
     "output": "build",
     "nwFlavor": "normal",
     "excludes": [

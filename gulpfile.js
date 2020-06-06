@@ -16,7 +16,7 @@ gulp.task('jshint', function() {
 gulp.task('build', function() {
 
   // Requires nw-builder installed globally.
-  let build_command = "nwbuild --version=\"0.33.3\" --buildDir=\"./build\" --platforms=\"osx64\",\"linux64\" --macIcns=\"./assets/osx/app.icns\" --flavor=\"normal\" ./";
+  let build_command = "nwbuild --version=\"0.38.0\" --buildDir=\"./build\" --platforms=\"osx64\",\"linux64\" --macIcns=\"./assets/osx/app.icns\" --flavor=\"normal\" ./";
 
   exec(build_command, { maxBuffer: 1024 * 1024}, (error, stdout, stderr) => {
     if (error) {
